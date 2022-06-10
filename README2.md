@@ -1,27 +1,27 @@
 # GA-Project-2
 
-#Title: Chuzzle
+Title: Chuzzle
 
 Premise: Chess puzzle app where users can play other users, or API fetched, puzzles.
 
 
-#The User Story:
+The User Story:
 AAU, I want to hone my chess skills by solving puzzles.
 AAU, I want to create my own puzzles for others to solve and enjoy.
 
 
-#The Wireframes:
+The Wireframes:
 ![](Images/Screen Shot 2022-06-10 at 1.51.05 PM.png)
 
 
-#The ERD: 
+The ERD: 
 
 ![](Images/Screen Shot 2022-06-10 at 1.51.05 PM.png)
 
-#Route Table:
+Route Table:
 
 
-#Technologies Used:
+Technologies Used:
 HTML, CSS, JavaScript, Canvas 
 
 #How To Use:
