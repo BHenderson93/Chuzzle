@@ -1,0 +1,19 @@
+{
+  "name": "chuzzle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "liquid": "^5.1.1",
+    "liquid-express-views": "^1.0.8",
+    "nodemon": "^2.0.16"
+  }
+}

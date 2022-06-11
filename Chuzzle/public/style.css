@@ -1,0 +1,38 @@
+body{
+margin:0;
+height:100vh;
+overflow: hidden;
+}
+header{
+    display:flex;
+    align-items: center;
+background-color: lightseagreen;
+height: 10vh;
+}
+main{
+    height:80vh;
+}
+footer{
+    display:flex;
+    align-items: center;
+background-color: lightseagreen;
+height: 10vh;
+}
+
+.square{
+    height:100%;
+    width:100%;
+}
+
+#board-container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50% , -50%);
+    height: 64vh;
+    width:64vh;
+    display:grid;
+    grid-template-columns: repeat(8, 8vh );
+    grid-template-rows: repeat(8,8vh);
+    border: black solid 5px;
+}
