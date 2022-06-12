@@ -22,7 +22,6 @@ height: 10vh;
 .square{
     height:100%;
     width:100%;
-    color:green;
     font-size: 5vh;
     display:flex;
     justify-content: center;
