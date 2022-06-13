@@ -52,6 +52,11 @@ class GameBoard {
                 this.board[end[0]][end[1]] = piece
                 piece.location = [end[0], end[1]]
                 piece.initialMoveAvailable = false
+                if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
+                    console.log('attempting pawn promote')
+                    this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
+                }
+
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
                 this.redrawBoard()
                 if (!noKingChecks()) {
@@ -266,7 +271,7 @@ class GameBoard {
                         }
                         //check for special pawn exceptions
                         if (currPiece.name === 'Pawn') {
-                            console.log('verifying enP',this.enPassant)
+                            //console.log('verifying enP', this.enPassant)
                             if (this.enPassant && this.enPassant[0] === currPiece.location[0] && (this.enPassant[1] === currPiece.location[1] + 1 || this.enPassant[1] === currPiece.location[1] - 1)) {
                                 console.log('checking en passant')
                                 startContents = this.board[row][col]
@@ -283,7 +288,7 @@ class GameBoard {
                                     currPiece.location = [row, col]
                                     console.log('King ok by en passant')
                                     return false
-                                }else{
+                                } else {
                                     this.board[row][col] = startContents
                                     this.board[this.enPassant[0]][this.enPassant[1]] = endContents
                                     this.board[this.enPassant[0]][this.enPassant[1]] = enPassantContents
@@ -342,6 +347,11 @@ class GameBoard {
             return true
         }
 
+        const promotePawn = (side, location) => {
+            let newPiece = new Queen(side, location)
+            //need logic for other piece options
+            return newPiece
+        }
         //see if the click is a piece and the right color for the turn.
         if (!checkPiece()) {
             return
@@ -387,6 +397,12 @@ class GameBoard {
                     this.enPassant = end
                 } else {
                     this.enPassant = null
+                }
+                if (piece.name === 'Pawn') {
+                    if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
+                        console.log('attempting pawn promote')
+                        this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
+                    }
                 }
                 //console.log('Move successful')
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
