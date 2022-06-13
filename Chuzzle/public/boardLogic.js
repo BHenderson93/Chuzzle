@@ -9,6 +9,7 @@ class GameBoard {
         this.tryMove = []
         this.captured = []
         this.enPassant = []
+        this.lastMoveLocation = []
     }
 
     pieceAttemptsMove() {
@@ -53,6 +54,11 @@ class GameBoard {
                 piece.initialMoveAvailable = false
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
                 this.redrawBoard()
+                if (!noKingChecks()) {
+                    if (isCheckmate()) {
+                        console.log('Checkmate!')
+                    }
+                }
                 return true
                 //statement for capturing a pawn en passant
             } else if ((this.enPassant && end[1] === this.enPassant[1]) && (end[0] === piece.location[0] + piece.movementStyle[0][0] && (end[1] === piece.location[1] + 1 || end[1] === piece.location[1] - 1))) {
@@ -66,6 +72,11 @@ class GameBoard {
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
                 this.enPassant = null
                 this.redrawBoard()
+                if (!noKingChecks()) {
+                    if (isCheckmate()) {
+                        console.log('Checkmate!')
+                    }
+                }
                 return true
             }
             return false
@@ -162,7 +173,7 @@ class GameBoard {
             }
             return false
         }
-
+        //needs work
         const noKingChecks = () => {
             let king = {}
             //find relevant king based off currentTurn
@@ -199,6 +210,14 @@ class GameBoard {
                                 console.log('KING IN CHECK!')
                                 return false
                             }
+                        } else if (currPiece.name === 'Pawn') {
+                            let pawnTakesRow = currPiece.location[0] + currPiece.movementStyle[0][0]
+                            console.log(currPiece.location[0], currPiece.movementStyle[0])
+                            console.log('ptr ', pawnTakesRow)
+                            if ((king.location[0] === pawnTakesRow && (king.location[1] === currPiece.location[1] - 1 || king.location[1] === currPiece.location[1] + 1))) {
+                                console.log('KING IN CHECK!')
+                                return false
+                            }
                         }
                     }
                 }
@@ -214,33 +233,106 @@ class GameBoard {
             } else {
                 king.side = 'Black'
             }
-            console.log('checking king side' , king.side)
+            console.log('checking king side', king.side)
             //check for the current turn's king's pieces
+            let startContents, endContents
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     let currPiece = this.board[row][col]
                     if (currPiece.side === king.side) {
-                        console.log('currPiece to block m8' , currPiece)
+                        console.log('currPiece to try to block m8', currPiece)
                         //if you find one, check to see whether any of its moves prevents that king from being in check.
                         for (let moveArr of currPiece.allMoves) {
                             for (let move of moveArr) {
-                                console.log('moveArr, move' , moveArr, move)
+                                console.log('moveArr, move', moveArr, move)
                                 if (noCollisions(moveArr, currPiece, move)) {
-                                    let startContents = this.board[row][col]
-                                    let endContents = this.board[move[0]][move[1]]
+                                    startContents = this.board[row][col]
+                                    endContents = this.board[move[0]][move[1]]
                                     this.board[move[0]][move[1]] = currPiece
                                     currPiece.location = move
                                     if (noKingChecks()) {
                                         this.board[row][col] = startContents
                                         this.board[move[0]][move[1]] = endContents
-                                        currPiece.location = [row,col]
-                                        console.log('King ok')
+                                        currPiece.location = [row, col]
+                                        console.log(`King ok bc of ${currPiece.name} ${move}`)
                                         return false
                                     } else {
                                         this.board[row][col] = startContents
                                         this.board[move[0]][move[1]] = endContents
-                                        currPiece.location = [row,col]
+                                        currPiece.location = [row, col]
                                     }
+                                }
+                            }
+                        }
+                        //check for special pawn exceptions
+                        if (currPiece.name === 'Pawn') {
+                            console.log('verifying enP',this.enPassant)
+                            if (this.enPassant && this.enPassant[0] === currPiece.location[0] && (this.enPassant[1] === currPiece.location[1] + 1 || this.enPassant[1] === currPiece.location[1] - 1)) {
+                                console.log('checking en passant')
+                                startContents = this.board[row][col]
+                                endContents = this.board[this.enPassant[0]][this.enPassant[1]]
+                                currPiece.location = [this.enPassant[0] + currPiece.movementStyle[0], this.enPassant[1]]
+                                this.board[this.enPassant[0] + currPiece.movementStyle[0][0]][this.enPassant[1]] = currPiece
+                                let enPassantContents = this.board[this.enPassant[0]][this.enPassant[1]]
+                                this.board[this.enPassant[0]][this.enPassant[1]] = ''
+                                this.board[row][col] = ''
+                                if (noKingChecks()) {
+                                    this.board[row][col] = currPiece
+                                    this.board[this.enPassant[0]][this.enPassant[1]] = endContents
+                                    this.board[this.enPassant[0] + currPiece.movementStyle[0][0]][this.enPassant[1]] = ''
+                                    currPiece.location = [row, col]
+                                    console.log('King ok by en passant')
+                                    return false
+                                }else{
+                                    this.board[row][col] = startContents
+                                    this.board[this.enPassant[0]][this.enPassant[1]] = endContents
+                                    this.board[this.enPassant[0]][this.enPassant[1]] = enPassantContents
+                                    currPiece.location = [row, col]
+                                }
+                            }
+
+                            let pawnTakesRow = currPiece.location[0] + currPiece.movementStyle[0][0]
+                            let pawnTakesCol1 = currPiece.location[1] - 1
+                            let pawnTakesCol2 = currPiece.location[1] + 1
+
+                            let square = this.board[pawnTakesRow][pawnTakesCol1]
+                            //check for object
+                            if (typeof (square) === 'object' && square.side !== currPiece.side) {
+                                startContents = currPiece
+                                endContents = this.board[pawnTakesRow][pawnTakesCol1]
+                                this.board[pawnTakesRow][pawnTakesCol1] = currPiece
+                                currPiece.location = [pawnTakesRow][pawnTakesCol1]
+                                this.board[row][col] = ''
+                                if (noKingChecks()) {
+                                    this.board[row][col] = startContents
+                                    this.board[pawnTakesRow][pawnTakesCol1] = endContents
+                                    currPiece.location = [row, col]
+                                    console.log('King ok by pawn capture')
+                                    return false
+                                } else {
+                                    this.board[row][col] = startContents
+                                    this.board[pawnTakesRow][pawnTakesCol1] = endContents
+                                    currPiece.location = [row, col]
+                                }
+                            }
+                            //reset and check other
+                            square = this.board[pawnTakesRow][pawnTakesCol2]
+                            if (typeof (square) === 'object' && square.side !== currPiece.side) {
+                                startContents = currPiece
+                                endContents = this.board[pawnTakesRow][pawnTakesCol2]
+                                this.board[pawnTakesRow][pawnTakesCol2] = currPiece
+                                currPiece.location = [pawnTakesRow][pawnTakesCol2]
+                                this.board[row][col] = ''
+                                if (noKingChecks()) {
+                                    this.board[row][col] = startContents
+                                    this.board[pawnTakesRow][pawnTakesCol2] = endContents
+                                    currPiece.location = [row, col]
+                                    console.log('King ok by pawn capture')
+                                    return false
+                                } else {
+                                    this.board[row][col] = startContents
+                                    this.board[pawnTakesRow][pawnTakesCol2] = endContents
+                                    currPiece.location = [row, col]
                                 }
                             }
                         }
@@ -308,8 +400,7 @@ class GameBoard {
         }
 
         //see if that move results in checkmate
-        //console.log('turn is ' , currentTurn)
-        if(!noKingChecks()){
+        if (!noKingChecks()) {
             if (isCheckmate()) {
                 console.log('Checkmate!')
             }
