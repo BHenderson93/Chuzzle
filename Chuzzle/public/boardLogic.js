@@ -255,6 +255,7 @@ class GameBoard {
                                     endContents = this.board[move[0]][move[1]]
                                     this.board[move[0]][move[1]] = currPiece
                                     currPiece.location = move
+                                    this.board[row][col]=''
                                     if (noKingChecks()) {
                                         this.board[row][col] = startContents
                                         this.board[move[0]][move[1]] = endContents
