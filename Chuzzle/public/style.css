@@ -3,15 +3,18 @@ margin:0;
 height:100vh;
 overflow: hidden;
 }
+
 header{
     display:flex;
     align-items: center;
 background-color: lightseagreen;
 height: 10vh;
 }
+
 main{
     height:80vh;
 }
+
 footer{
     display:flex;
     align-items: center;
@@ -39,4 +42,5 @@ height: 10vh;
     grid-template-columns: repeat(8, 8vh );
     grid-template-rows: repeat(8,8vh);
     border: black solid 5px;
+    user-select:none;
 }

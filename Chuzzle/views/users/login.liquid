@@ -1,0 +1,21 @@
+
+{% layout 'layout.liquid' %}
+
+{%block content%}
+<h1>Login Page</h1>
+    <div class="container">
+        <form action="" method="">
+            Username:
+            <input type="text" name="username" id="" placeholder="Username">
+            Password:
+            <input type="text" name="password" id="" placeholder="Password">
+            <input type="submit" value="Log in">
+        </form>
+    </div>
+    <div>
+        Don't have an account? Sign up now!
+        <a href="/users/signup"><button>Click to sign up</button></a>
+    </div>
+
+{% endblock %}
+
