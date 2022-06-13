@@ -9,16 +9,22 @@
 </head>
 <body>
     <header>
-        <h1>Chuzzle - The Chess Puzzle App</h1>
-        <h1 style="position:fixed;top:0;right:0;">User Profile Icon</h1>
+        <h1 style="position:absolute;top:1.5%;left:1%;font-size:7vh;">Chuzzle</h1>
+        <a href="/users/profile"><h1 style="position:absolute;top:1.5%;right:1%;font-size:7vh;">Profile</h1></a>
     </header>
 
     <main>
+        <aside>
+            <h1 style="position:absolute;top:1%;">Navigation</h1>
+                <a href="/game/standard-game">New Game</a>
+                <a href="">User Tactics</a>
+                <a href="">Online Tactics</a>
+        </aside>
         {%block content %} {% endblock%}
     </main>
 
     <footer>
-
+        <h3>Please do not contact me</h3>
     </footer>
 
 </body>

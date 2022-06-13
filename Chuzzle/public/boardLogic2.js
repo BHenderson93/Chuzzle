@@ -1,7 +1,4 @@
-console.log('Hooked up')
-const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-const testFEN = "2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1"
-const gamePackage = () =>{}
+
 //bug list - stalemate, pawn captures/en passant allowing check containing positions.
 class GameBoard {
     constructor(initialFEN) {
@@ -623,9 +620,6 @@ const initializeScreen = () => {
 
     gameBoard.initializeBoard()
 }
-
 let currentTurn = 0
-const gameBoard = new GameBoard( localStorage.getItem('FEN') || testFEN)
+const gameBoard = new GameBoard(window.sessionStorage.getItem('FEN'))
 initializeScreen()
-
-

@@ -3,7 +3,7 @@ const { Schema, model } = mongoose
 
 const tacticSchema = new Schema({
     fen: { type: String, required: true },
-    solutionSequence: { type: String },
+    solutionSequence: { type: String , required:true},
     createdBy: { type: Schema.Types.ObjectId },
     comments: { type: Schema.Types.ObjectId },
     totalAttempts: { type: Number },

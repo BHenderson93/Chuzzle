@@ -4,6 +4,7 @@ const path = require('path')
 const app = require('liquid-express-views')(express(), { root: [path.resolve(__dirname, 'views/')] })
 const session = require('express-session')
 const Mongo = require('connect-mongo')
+const mongoose = require('./models/M-connection')
 
 const userRouter = require('./controllers/C-users')
 const gameRouter = require('./controllers/C-game')

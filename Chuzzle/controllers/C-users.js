@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const User = require('../models/M-user')
 
 
 router.get('/' , (req,res)=>{
@@ -12,11 +12,18 @@ router.get('/login' , (req,res)=>{
 })
 
 router.get('/signup' , (req,res)=>{
-    res.render('users/signup')
+    res.render('users/signup' , {
+
+    })
 })
 
 router.get('/profile' , (req,res)=>{
-    res.render('users/profile')
+    User.findOne({name:'Bryce'}).then((user)=>{
+        res.render('users/profile' , {
+            user
+        })
+    })
+
 })
 
 

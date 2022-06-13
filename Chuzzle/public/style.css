@@ -1,46 +1,95 @@
-body{
-margin:0;
-height:100vh;
-overflow: hidden;
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
 }
 
-header{
-    display:flex;
+header {
+    display: flex;
     align-items: center;
-background-color: lightseagreen;
-height: 10vh;
+    background-color: lightseagreen;
+    height: 10vh;
 }
 
-main{
-    height:80vh;
+main {
+    height: 80vh;
 }
 
-footer{
-    display:flex;
+h1{
+    margin:0;
+}
+
+footer {
+    display: flex;
     align-items: center;
-background-color: lightseagreen;
-height: 10vh;
+    justify-content: center;
+    background-color: lightseagreen;
+    height: 10vh;
+    font-style: italic;
 }
 
-.square{
-    height:100%;
-    width:100%;
+aside {
+    position: fixed;
+    left: 0;
+    top: 10vh;
+    height: 80vh;
+    width: 10vw;
+    background: cornflowerblue;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.square {
+    height: 100%;
+    width: 100%;
     font-size: 5vh;
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#board-container{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50% , -50%);
+.main-display {
+    width: 80vw;
+    height: 70vh;
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background: cornflowerblue;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.info-container {
+    width: 30%;
+    height: 90%;
+    background-color: orange;
+    display:flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.info{
+    height:80%;
+    width:90%;
+    background:yellow;
+}
+
+#board-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     height: 64vh;
-    width:64vh;
-    display:grid;
-    grid-template-columns: repeat(8, 8vh );
-    grid-template-rows: repeat(8,8vh);
+    width: 64vh;
+    display: grid;
+    grid-template-columns: repeat(8, 8vh);
+    grid-template-rows: repeat(8, 8vh);
     border: black solid 5px;
-    user-select:none;
+    user-select: none;
 }
