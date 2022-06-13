@@ -31,6 +31,7 @@ class GameBoard {
         }
 
         const findMoveArray = (currentPiece, endLocation) => {
+            //console.log('currPiece' , currentPiece)
             for (let moveArray of currentPiece.allMoves) {
                 for (let array of moveArray) {
                     if (array[0] === endLocation[0] && array[1] === endLocation[1]) {
@@ -70,51 +71,75 @@ class GameBoard {
             return false
         }
 
-        const tryCastling = () => {
+        const tryCastling = (currPiece) => {
+            let savedLocation = currPiece.location
             if (this.board[end[0]][7].initialMoveAvailable && end[1] === 6) {
                 if (this.board[end[0]][5] !== '' || this.board[end[0]][6] !== '') {
-                    //add in logic for castling through check
                     return false
                 } else {
-                    //king stuff
-                    this.board[end[0]][end[1]] = piece
-                    piece.location = end
-                    this.board[start[0]][start[1]] = ''
-                    piece.initialMoveAvailable = false
-                    //rook stuff
-                    this.board[end[0]][7].location = [end[0], end[1] - 1]
-                    this.board[end[0]][end[1] - 1] = this.board[end[0]][7]
-                    this.board[end[0]][7] = ''
-                    //move stuff
-                    currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
-                    this.redrawBoard()
-                    return true
+                    //check for castling through check
+                    if (noKingChecks()) {
+                        currPiece.location = [end[0],5]
+                        this.board[end[0]][5] = currPiece
+                        if (noKingChecks()) {
+                            currPiece.location = [end[0],6]
+                            this.board[end[0]][6] = currPiece
+                            if (noKingChecks()) {
+                                this.board[end[0]][end[1]] = currPiece
+                                this.board[end[0]][4]=''
+                                currPiece.initialMoveAvailable = false
+                                //rook stuff
+                                this.board[end[0]][7].location = [end[0], end[1] - 1]
+                                this.board[end[0]][end[1] - 1] = this.board[end[0]][7]
+                                this.board[end[0]][7] = ''
+                                //move stuff
+                                currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
+                                this.redrawBoard()
+                                return true
+                            }
+                        }
+                    }
+                    this.board[end[0]][5] = ''
+                    this.board[end[0]][6] = ''
                 }
             } else if (this.board[end[0]][0].initialMoveAvailable && end[1] === 2) {
                 if (this.board[end[0]][3] !== '' || this.board[end[0]][2] !== '' || this.board[end[0]][1] !== '') {
                     return false
                 } else {
-                    //king stuff
-                    this.board[end[0]][end[1]] = piece
-                    piece.location = end
-                    this.board[start[0]][start[1]] = ''
-                    piece.initialMoveAvailable = false
-                    //rook stuff
-                    this.board[end[0]][0].location = [end[0], end[1] + 1]
-                    this.board[end[0]][end[1] + 1] = this.board[end[0]][0]
-                    this.board[end[0]][0] = ''
-                    //move stuff
-                    currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
-                    this.redrawBoard()
-                    return true
+                    if (noKingChecks()) {
+                        currPiece.location = [end[0],3]
+                        this.board[end[0]][3] = currPiece
+                        if (noKingChecks()) {
+                            currPiece.location = [end[0],2]
+                            this.board[end[0]][2] = currPiece
+                            if (noKingChecks()) {
+                                //king stuff
+                                this.board[end[0]][end[1]] = currPiece
+                                this.board[start[0]][4]=''
+                                currPiece.initialMoveAvailable = false
+                                //rook stuff
+                                this.board[end[0]][0].location = [end[0], end[1] + 1]
+                                this.board[end[0]][end[1] + 1] = this.board[end[0]][0]
+                                this.board[end[0]][0] = ''
+                                //move stuff
+                                currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
+                                this.redrawBoard()
+                                return true
+                            }
+                        }
+                    }
+                    this.board[end[0]][3] = ''
+                    this.board[end[0]][2] = ''
                 }
             }
+            currPiece.location = savedLocation
+            this.board[end[0]][4] = currPiece
             return false
         }
 
         const noCollisions = (movePath, currPiece, endLocation) => {
-            console.log('checking movepath... ',movePath)
-            console.log('end loc' , endLocation)
+            //console.log('checking movepath... ', movePath)
+            //console.log('end loc', endLocation)
             for (let move of movePath) {
                 //console.log(move)
                 let square = this.board[move[0]][move[1]]
@@ -130,7 +155,7 @@ class GameBoard {
                     return true
                 } else {
                     if (typeof (square) === 'object') {
-                        console.log(`A piece is in the way at ${move}`)
+                        //console.log(`A piece is in the way at ${move}`)
                         return false
                     }
                 }
@@ -150,9 +175,9 @@ class GameBoard {
             //check if each square is that king
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
-                    let piece = this.board[row][col]
-                    if (piece.name === 'King' && piece.side === king.side) {
-                        king.location = piece.location
+                    let currPiece = this.board[row][col]
+                    if (currPiece.name === 'King' && currPiece.side === king.side) {
+                        king.location = currPiece.location
                         break
                     }
                 }
@@ -160,15 +185,17 @@ class GameBoard {
                     break
                 }
             }
-            console.log('king is ' ,king)
+            console.log('king is ', king)
             //iterate through all opposing pieces to check if there are any moveArrays that can hit the relevant king.
+            //if the king is castling (boolean) check all 3 locations for checks.
+
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     let currPiece = typeof (this.board[row][col]) === 'object' && this.board[row][col].side !== king.side ? this.board[row][col] : null
                     if (currPiece) {
                         let moveArr = findMoveArray(currPiece, king.location)
                         if (moveArr) {
-                            if (noCollisions(moveArr,currPiece, king.location)) {
+                            if (noCollisions(moveArr, currPiece, king.location)) {
                                 console.log('KING IN CHECK!')
                                 return false
                             }
@@ -194,7 +221,7 @@ class GameBoard {
                     return
                 }
             } else if (piece.name === 'King' && piece.initialMoveAvailable && Math.abs(end[1] - start[1]) === 2 && end[0] - start[0] === 0) {
-                if (tryCastling()) {
+                if (tryCastling(piece)) {
                     console.log('Castled')
                     return
                 } else {
@@ -208,13 +235,16 @@ class GameBoard {
 
         //check whether something is in the way from start->end for the piece.
         if (noCollisions(movementPath, piece, end)) {
+
+            //test out move and check for checks
             let startContents = this.board[start[0]][start[1]]
             let endContents = this.board[end[0]][end[1]]
             this.board[start[0]][start[1]] = ''
             this.board[end[0]][end[1]] = piece
             piece.location = [end[0], end[1]]
-            if(noKingChecks()){
-                
+
+            if (noKingChecks()) {
+
                 piece.initialMoveAvailable = false
                 //console.log('math', Math.abs(start[0] - end[0]))
                 if (piece.name === 'Pawn' && Math.abs(start[0] - end[0]) === 2) {
@@ -225,12 +255,13 @@ class GameBoard {
                 //console.log('Move successful')
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
                 this.redrawBoard()
-            }else{
+            } else {
+                //if there's a check, revert back.
                 this.board[start[0]][start[1]] = startContents
                 this.board[end[0]][end[1]] = endContents
                 piece.location = [start[0], start[1]]
             }
-        }   
+        }
     }
 
     //end of pieceAttemptsMove
