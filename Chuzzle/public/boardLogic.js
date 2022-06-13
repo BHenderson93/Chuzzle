@@ -79,14 +79,14 @@ class GameBoard {
                 } else {
                     //check for castling through check
                     if (noKingChecks()) {
-                        currPiece.location = [end[0],5]
+                        currPiece.location = [end[0], 5]
                         this.board[end[0]][5] = currPiece
                         if (noKingChecks()) {
-                            currPiece.location = [end[0],6]
+                            currPiece.location = [end[0], 6]
                             this.board[end[0]][6] = currPiece
                             if (noKingChecks()) {
                                 this.board[end[0]][end[1]] = currPiece
-                                this.board[end[0]][4]=''
+                                this.board[end[0]][4] = ''
                                 currPiece.initialMoveAvailable = false
                                 //rook stuff
                                 this.board[end[0]][7].location = [end[0], end[1] - 1]
@@ -107,15 +107,15 @@ class GameBoard {
                     return false
                 } else {
                     if (noKingChecks()) {
-                        currPiece.location = [end[0],3]
+                        currPiece.location = [end[0], 3]
                         this.board[end[0]][3] = currPiece
                         if (noKingChecks()) {
-                            currPiece.location = [end[0],2]
+                            currPiece.location = [end[0], 2]
                             this.board[end[0]][2] = currPiece
                             if (noKingChecks()) {
                                 //king stuff
                                 this.board[end[0]][end[1]] = currPiece
-                                this.board[start[0]][4]=''
+                                this.board[start[0]][4] = ''
                                 currPiece.initialMoveAvailable = false
                                 //rook stuff
                                 this.board[end[0]][0].location = [end[0], end[1] + 1]
@@ -148,7 +148,7 @@ class GameBoard {
                     //check for captures
                     if (typeof (square) === 'object') {
                         if (currPiece.name === 'Pawn') {
-                            console.log('A piece is in the way, and Im a pawn.')
+                            //console.log('A piece is in the way, and Im a pawn.')
                             return false
                         }
                     }
@@ -198,6 +198,50 @@ class GameBoard {
                             if (noCollisions(moveArr, currPiece, king.location)) {
                                 console.log('KING IN CHECK!')
                                 return false
+                            }
+                        }
+                    }
+                }
+            }
+            return true
+        }
+
+        const isCheckmate = () => {
+            let king = {}
+            //find relevant king based off currentTurn
+            if (currentTurn === 0) {
+                king.side = 'White'
+            } else {
+                king.side = 'Black'
+            }
+            console.log('checking king side' , king.side)
+            //check for the current turn's king's pieces
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    let currPiece = this.board[row][col]
+                    if (currPiece.side === king.side) {
+                        console.log('currPiece to block m8' , currPiece)
+                        //if you find one, check to see whether any of its moves prevents that king from being in check.
+                        for (let moveArr of currPiece.allMoves) {
+                            for (let move of moveArr) {
+                                console.log('moveArr, move' , moveArr, move)
+                                if (noCollisions(moveArr, currPiece, move)) {
+                                    let startContents = this.board[row][col]
+                                    let endContents = this.board[move[0]][move[1]]
+                                    this.board[move[0]][move[1]] = currPiece
+                                    currPiece.location = move
+                                    if (noKingChecks()) {
+                                        this.board[row][col] = startContents
+                                        this.board[move[0]][move[1]] = endContents
+                                        currPiece.location = [row,col]
+                                        console.log('King ok')
+                                        return false
+                                    } else {
+                                        this.board[row][col] = startContents
+                                        this.board[move[0]][move[1]] = endContents
+                                        currPiece.location = [row,col]
+                                    }
+                                }
                             }
                         }
                     }
@@ -262,9 +306,15 @@ class GameBoard {
                 piece.location = [start[0], start[1]]
             }
         }
-    }
 
-    //end of pieceAttemptsMove
+        //see if that move results in checkmate
+        //console.log('turn is ' , currentTurn)
+        if(!noKingChecks()){
+            if (isCheckmate()) {
+                console.log('Checkmate!')
+            }
+        }
+    }
 
     redrawBoard() {
         for (let row = 0; row < 8; row++) {
