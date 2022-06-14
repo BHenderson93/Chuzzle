@@ -1,6 +1,5 @@
 console.log('Hooked up')
-const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-const testFEN = "2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1"
+const emptyFEN = "8/8/8/8/8/8/8/8"
 
 //bug list - stalemate, pawn captures/en passant allowing check containing positions.
 class GameBoard {
@@ -449,7 +448,7 @@ class GameBoard {
     }
 
     initializeBoard() {
-        const gameBoard = document.getElementById('board-container')
+        const gameBoard = document.getElementById('board-container-independent')
         let fenIndex = 0
         //make the 64 squres
         for (let row = 0; row < 8; row++) {
@@ -514,8 +513,35 @@ class GameBoard {
         }
         return newFEN
     }
-}
 
+    fenCreater (){
+        let fen = ''
+        for(let row = 0 ; row < 8 ; row++){
+            let empty = 0
+            for( let col = 0 ; col < 8 ; col++){
+                let sq = this.board[row][col]
+                if (typeof(sq)!== 'object'){
+                    empty++
+                }else{
+                    if (empty > 0){
+                        fen+= String(empty)
+                        empty = 0
+                    }
+                    fen+=sq.img
+                }
+            }
+            if(empty > 0){
+                fen += empty
+                empty = 0
+            }
+            if( row < 7 ){
+                fen += '/'
+            }
+        }
+        return fen
+    }
+}
+// #region pieces
 class Piece {
     constructor(side, location) {
         this.name = 'piece'
@@ -531,11 +557,12 @@ class Piece {
     }
 
     makeAllMovesArray() {
-        //console.log('in makeAll')
+        console.log('in makeAll')
+        console.log(this.location)
         this.allMoves = []
         let tempMax = this.name === 'Pawn' ? this.initialMoveAvailable ? this.movementMax + 1 : this.movementMax : this.movementMax
         for (let movement of this.movementStyle) {
-            //console.log(movement)
+            console.log(movement)
             let moveStyleArray = []
             for (let inc = 1; inc <= tempMax; inc++) {
                 let tempMove = this.location.slice()
@@ -548,6 +575,7 @@ class Piece {
             }
             this.allMoves.push(moveStyleArray)
         }
+        console.log(this.allMoves)
     }
 
 }
@@ -613,21 +641,60 @@ class Pawn extends Piece {
     }
 }
 
+//#endregion
+
 const initializeScreen = () => {
-    document.getElementById('board-container').addEventListener('mousedown', (e) => {
+    document.getElementById('create-menu').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
-        gameBoard.tryMove[0] = e.target.id.split('')
+        if(e.target.classList.contains('menu-item')){
+            console.log('menu clicked')
+            currentSelection = e.target.innerText
+            console.log('piece selected is ',currentSelection)
+        }else if(e.target.classList.contains('square')){
+            gameBoard.tryMove[0] = e.target.id.split('')
+        }
     })
-    document.getElementById('board-container').addEventListener('mouseup', (e) => {
+    document.getElementById('create-menu').addEventListener('mouseup', (e) => {
         //console.log(e.target.id)
-        gameBoard.tryMove[1] = e.target.id.split('')
-        gameBoard.pieceAttemptsMove()
-    })
+    if(e.target.classList.contains('square')){
+        if(currentSelection !== ''){
+            console.log('attempting to create')
+            let boardcoords = e.target.id.split('')
+            boardcoords[0] = Number(boardcoords[0])
+            boardcoords[1] = Number(boardcoords[1])
+            let piece
+            currentSelection === 'Q' ? piece = new Queen('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'K' ? piece = new King('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'R' ? piece = new Rook('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'B' ? piece = new Bishop('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'N' ? piece = new Knight('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'P' ? piece = new Pawn('White', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'q' ? piece = new Queen('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'k' ? piece = new King('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'r' ? piece = new Rook('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'b' ? piece = new Bishop('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'n' ? piece = new Knight('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'p' ? piece = new Pawn('Black', [boardcoords[0],boardcoords[1]]) : null
+            gameBoard.board[boardcoords[0]][boardcoords[1]] = piece
+
+            currentSelection=''
+            gameBoard.redrawBoard()
+        }else{
+            console.log('attempt moved called')
+            gameBoard.tryMove[1] = e.target.id.split('')
+            gameBoard.pieceAttemptsMove()
+        }
+    }else{
+        currentSelection = ''
+    }}
+    )
     //insert element sticks to mouse listener on click somewhere in here
 
+    console.log('initi board')
     gameBoard.initializeBoard()
 }
 
+let currentSelection = ''
 let currentTurn = 0
-const gameBoard = new GameBoard( generalFEN)
+const gameBoard = new GameBoard(emptyFEN)
 initializeScreen()

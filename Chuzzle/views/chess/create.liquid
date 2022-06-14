@@ -1,0 +1,36 @@
+{% layout 'layout.liquid' %}
+
+{% block content%}
+
+
+<div id="create-menu">
+    <div id="board-container-independent">
+
+    </div>
+    <div id="menu-list">
+        <div class="menu-item">Q</div>
+        <div class="menu-item">q</div>
+        <div class="menu-item">K</div>
+        <div class="menu-item">k</div>
+        <div class="menu-item">R</div>
+        <div class="menu-item">r</div>
+        <div class="menu-item">N</div>
+        <div class="menu-item">n</div>
+        <div class="menu-item">B</div>
+        <div class="menu-item">b</div>
+        <div class="menu-item">P</div>
+        <div class="menu-item">p</div>
+    </div>
+    <div class="option-list">
+        <div class="menu-option"><button>Start Recording Solution</button></div>
+        <div class="menu-option"><button>End Recording Solution</button></div>
+        <div class="menu-option"><button>Replay</button></div>
+        <div class="menu-option"><button>Reset Board</button></div>
+        <br />
+        <div class="menu-option"><button>Publish!</button></div>
+    </div>
+</div>
+
+
+<script src="/createLogic.js"></script>
+{% endblock %}

@@ -9,7 +9,7 @@ router.get('/standard-game', (req, res) => {
     res.render('chess/standardGame')
 })
 
-router.get('/tactic', (req, res) => {
+router.get('/tactic/user', (req, res) => {
     Tactic.findOne({}).then((tactic) => {
         console.log(tactic)
         let solutionArr = []
@@ -80,7 +80,10 @@ router.get('/tactic', (req, res) => {
     }).catch((err) => {
         console.log(err)
     })
+})
 
+router.get('/create' , (req,res)=>{
+    res.render('chess/create')
 })
 
 module.exports = router

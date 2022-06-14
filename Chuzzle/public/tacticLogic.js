@@ -351,7 +351,7 @@ class GameBoard {
             return newPiece
         }
         //see if the click is a piece and the right color for the turn.
-
+// #region gamelogic
         if(autoMove === true){
             let i = moves[this.moveIndex].split('')
                 this.tryMove = [[i[1],i[0]],[i[3],i[2]]]
@@ -388,6 +388,7 @@ class GameBoard {
             currentTurn = 0
             this.moveIndex = 0
             this.resetBoard()
+            this.pieceAttemptsMove(true , false)
             return
         }
         //console.log(this.tryMove)
@@ -468,6 +469,8 @@ class GameBoard {
         //if tactic move is correct, do the next
         
     }
+
+    //#endregion
 
     redrawBoard() {
         for (let row = 0; row < 8; row++) {
@@ -708,4 +711,5 @@ const gameBoard = new GameBoard(fen)
 
 initializeScreen()
 console.log('moves are' , moves)
-gameBoard.pieceAttemptsMove(true)
+setTimeout(()=>{
+    gameBoard.pieceAttemptsMove(true , false)} , 1000)

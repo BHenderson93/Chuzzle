@@ -84,12 +84,47 @@ aside {
     width:90%;
     background:yellow;
 }
+.menu-item{
+    text-align: center;
+    border: black solid 1px;
+}
+#create-menu{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 64vh;
+    width: 80vh;
+    display:flex;
+    flex-flow: row nowrap;
+}
+
+#menu-list{
+    display:grid;
+    height:48vh;
+    width: 16vh;
+    grid-template-rows: repeat(6,8vh);
+    grid-template-columns: 8vh 8vh;
+    background-color: lightgray;
+    user-select: none;
+}
+
+
 
 #board-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    height: 64vh;
+    width: 64vh;
+    display: grid;
+    grid-template-columns: repeat(8, 8vh);
+    grid-template-rows: repeat(8, 8vh);
+    border: black solid 5px;
+    user-select: none;
+}
+#board-container-independent {
     height: 64vh;
     width: 64vh;
     display: grid;
