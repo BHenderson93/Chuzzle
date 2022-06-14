@@ -675,6 +675,7 @@ const initializeScreen = () => {
             currentSelection === 'b' ? piece = new Bishop('Black', [boardcoords[0],boardcoords[1]]) : null
             currentSelection === 'n' ? piece = new Knight('Black', [boardcoords[0],boardcoords[1]]) : null
             currentSelection === 'p' ? piece = new Pawn('Black', [boardcoords[0],boardcoords[1]]) : null
+            currentSelection === 'Eraser' ? piece = '' :null
             gameBoard.board[boardcoords[0]][boardcoords[1]] = piece
 
             currentSelection=''

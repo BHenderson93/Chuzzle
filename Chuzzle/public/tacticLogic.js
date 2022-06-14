@@ -357,7 +357,7 @@ class GameBoard {
                 this.tryMove = [[i[1],i[0]],[i[3],i[2]]]
             setTimeout(()=>{
                 this.pieceAttemptsMove(false , false)
-            },400)
+            },600)
         }
         let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
         let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
@@ -703,7 +703,8 @@ const initializeScreen = () => {
     //insert element sticks to mouse listener on click somewhere in here
     gameBoard.initializeBoard()
 }
-let currentTurn = 0
+let currentTurn = Number(document.getElementById('currMove').innerText)
+console.log('Starting on turn ' , currentTurn)
 let fen = document.getElementById('fen').innerText
 let moves = document.getElementById('moves').innerText.split(',')
 let id = document.getElementById('id').innerText
