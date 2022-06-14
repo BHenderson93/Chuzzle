@@ -8,16 +8,14 @@ class GameBoard {
         this.captured = []
         this.enPassant = []
         this.lastMoveLocation = []
+        this.moveString = ''
+        this.moveIndex = 0
     }
 
-    pieceAttemptsMove() {
-        //console.log(this.tryMove)
-        let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
-        let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
-        let piece = this.board[start[0]][start[1]]
-        let movementPath = false
+    pieceAttemptsMove(autoMove, myMove) {
 
         const checkPiece = () => {
+            console.log('piece, turn: ' , piece.name , currentTurn)
             if (typeof (piece) !== 'object') {
                 console.log('Cannot find piece on that square')
                 return false
@@ -54,6 +52,7 @@ class GameBoard {
                     console.log('attempting pawn promote')
                     this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
                 }
+
 
                 currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
                 this.redrawBoard()
@@ -199,7 +198,7 @@ class GameBoard {
                     break
                 }
             }
-            console.log('king is ', king)
+            //console.log('king is ', king)
             //iterate through all opposing pieces to check if there are any moveArrays that can hit the relevant king.
             //if the king is castling (boolean) check all 3 locations for checks.
 
@@ -210,15 +209,15 @@ class GameBoard {
                         let moveArr = findMoveArray(currPiece, king.location)
                         if (moveArr) {
                             if (noCollisions(moveArr, currPiece, king.location)) {
-                                console.log('KING IN CHECK!')
+                                //console.log('KING IN CHECK!')
                                 return false
                             }
                         } else if (currPiece.name === 'Pawn') {
                             let pawnTakesRow = currPiece.location[0] + currPiece.movementStyle[0][0]
-                            console.log(currPiece.location[0], currPiece.movementStyle[0])
-                            console.log('ptr ', pawnTakesRow)
+                            //console.log(currPiece.location[0], currPiece.movementStyle[0])
+                            //console.log('ptr ', pawnTakesRow)
                             if ((king.location[0] === pawnTakesRow && (king.location[1] === currPiece.location[1] - 1 || king.location[1] === currPiece.location[1] + 1))) {
-                                console.log('KING IN CHECK!')
+                                //console.log('KING IN CHECK!')
                                 return false
                             }
                         }
@@ -243,11 +242,11 @@ class GameBoard {
                 for (let col = 0; col < 8; col++) {
                     let currPiece = this.board[row][col]
                     if (currPiece.side === king.side) {
-                        console.log('currPiece to try to block m8', currPiece)
+                        //console.log('currPiece to try to block m8', currPiece)
                         //if you find one, check to see whether any of its moves prevents that king from being in check.
                         for (let moveArr of currPiece.allMoves) {
                             for (let move of moveArr) {
-                                console.log('moveArr, move', moveArr, move)
+                                //console.log('moveArr, move', moveArr, move)
                                 if (noCollisions(moveArr, currPiece, move)) {
                                     startContents = this.board[row][col]
                                     endContents = this.board[move[0]][move[1]]
@@ -352,6 +351,49 @@ class GameBoard {
             return newPiece
         }
         //see if the click is a piece and the right color for the turn.
+
+        if(autoMove === true){
+            let i = moves[this.moveIndex].split('')
+                this.tryMove = [[i[1],i[0]],[i[3],i[2]]]
+            setTimeout(()=>{
+                this.pieceAttemptsMove(false , false)
+            },400)
+        }
+        let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
+        let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
+        let piece = this.board[start[0]][start[1]]
+        let movementPath = false
+
+        if (autoMove === false){
+
+            //console.log('trymove is' ,this.tryMove)
+        this.moveString = String(this.tryMove[0][1]+this.tryMove[0][0]+this.tryMove[1][1]+this.tryMove[1][0])
+        //console.log('moveString is' , this.moveString)
+
+        if(this.moveString === moves[this.moveIndex]){
+            console.log('Correct move!')
+            console.log(this.moveIndex, moves.length)
+            if(this.moveIndex+1 === moves.length){
+                console.log('Puzzle complete')
+            }else{
+                this.moveIndex++
+                if(myMove){
+                    console.log('this my my move')
+                    this.pieceAttemptsMove(true , false)
+                }
+                
+            }
+        }else{
+            console.log('Wrong move!')
+            currentTurn = 0
+            this.moveIndex = 0
+            this.resetBoard()
+            return
+        }
+        //console.log(this.tryMove)
+
+
+
         if (!checkPiece()) {
             return
         }
@@ -421,6 +463,11 @@ class GameBoard {
             }
         }
     }
+        //draw arrow for square to square.
+
+        //if tactic move is correct, do the next
+        
+    }
 
     redrawBoard() {
         for (let row = 0; row < 8; row++) {
@@ -440,6 +487,36 @@ class GameBoard {
             }
         }
     }
+
+    resetBoard (){
+        let fenIndex = 0
+        this.board = []
+        for (let row = 0; row < 8; row++) {
+            let rowArray = []
+            for (let col = 0; col < 8; col++) {
+                if (this.pieceArray[fenIndex] === ' ') {
+                    rowArray.push('')
+                } else {
+                    //logic for putting in pieces
+                    this.pieceArray[fenIndex] === 'Q' ? rowArray.push(new Queen('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'K' ? rowArray.push(new King('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'R' ? rowArray.push(new Rook('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'B' ? rowArray.push(new Bishop('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'N' ? rowArray.push(new Knight('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'P' ? rowArray.push(new Pawn('White', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'q' ? rowArray.push(new Queen('Black', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'k' ? rowArray.push(new King('Black', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'r' ? rowArray.push(new Rook('Black', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'b' ? rowArray.push(new Bishop('Black', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'n' ? rowArray.push(new Knight('Black', [row, col])) : null
+                    this.pieceArray[fenIndex] === 'p' ? rowArray.push(new Pawn('Black', [row, col])) : null
+                }
+                fenIndex++
+            }
+            this.board.push(rowArray)
+    }
+    this.redrawBoard()
+}
 
     initializeBoard() {
         const gameBoard = document.getElementById('board-container')
@@ -509,6 +586,7 @@ class GameBoard {
     }
 }
 
+// #region pieces
 class Piece {
     constructor(side, location) {
         this.name = 'piece'
@@ -606,6 +684,9 @@ class Pawn extends Piece {
     }
 }
 
+
+// #endregion
+
 const initializeScreen = () => {
     document.getElementById('board-container').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
@@ -614,12 +695,17 @@ const initializeScreen = () => {
     document.getElementById('board-container').addEventListener('mouseup', (e) => {
         //console.log(e.target.id)
         gameBoard.tryMove[1] = e.target.id.split('')
-        gameBoard.pieceAttemptsMove()
+        gameBoard.pieceAttemptsMove(false , true)
     })
     //insert element sticks to mouse listener on click somewhere in here
-
     gameBoard.initializeBoard()
 }
 let currentTurn = 0
-const gameBoard = new GameBoard(window.sessionStorage.getItem('FEN'))
+let fen = document.getElementById('fen').innerText
+let moves = document.getElementById('moves').innerText.split(',')
+let id = document.getElementById('id').innerText
+const gameBoard = new GameBoard(fen)
+
 initializeScreen()
+console.log('moves are' , moves)
+gameBoard.pieceAttemptsMove(true)

@@ -1,7 +1,7 @@
 console.log('Hooked up')
 const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 const testFEN = "2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1"
-const gamePackage = () =>{}
+
 //bug list - stalemate, pawn captures/en passant allowing check containing positions.
 class GameBoard {
     constructor(initialFEN) {
@@ -11,9 +11,13 @@ class GameBoard {
         this.captured = []
         this.enPassant = []
         this.lastMoveLocation = []
+        this.moveString
     }
 
     pieceAttemptsMove() {
+        console.log('trymove is' ,this.tryMove)
+        this.moveString = this.tryMove[0].join('')+this.tryMove[1].join('')
+        console.log('moveString is' , this.moveString)
         //console.log(this.tryMove)
         let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
         let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
@@ -625,7 +629,7 @@ const initializeScreen = () => {
 }
 
 let currentTurn = 0
-const gameBoard = new GameBoard( localStorage.getItem('FEN') || testFEN)
+const gameBoard = new GameBoard( generalFEN)
 initializeScreen()
 
 

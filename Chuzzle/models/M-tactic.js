@@ -3,12 +3,13 @@ const { Schema, model } = mongoose
 
 const tacticSchema = new Schema({
     fen: { type: String, required: true },
-    solutionSequence: { type: String , required:true},
+    moves: [{ type: String , required:true}],
+    puzzleid:{type:String , default:'User Created'},
     createdBy: { type: Schema.Types.ObjectId },
     comments: { type: Schema.Types.ObjectId },
-    totalAttempts: { type: Number },
-    successes: { type: Number },
-    fails: { type: Number }
+    totalAttempts: { type: Number , default:0},
+    successes: { type: Number , default:0},
+    fails: { type: Number,default:0}
 })
 
 module.exports = model('Tactics', tacticSchema)

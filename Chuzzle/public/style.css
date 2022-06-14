@@ -73,6 +73,11 @@ aside {
     align-items: center;
     justify-content: space-evenly;
 }
+.hidden{
+    display:none;
+    height:0;
+    width:0;
+}
 
 .info{
     height:80%;

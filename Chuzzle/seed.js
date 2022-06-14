@@ -14,11 +14,15 @@ const starterUsers = [{
 ]
 
 const starterTactics = [{
-
-}]
+    fen:'2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1',
+    moves:["c3d5","e6d5","c2c8","f8c8"],
+}
+]
 
 Tactics.deleteMany({}).then(() => {
-    console.log('Reseeded tactics')
+    Tactics.create(starterTactics).then((tactics)=>{
+        console.log('Reseeded tactics' , tactics)
+    })
 }).catch((err) => {
     console.log('Error: ', err)
 }).finally(() => {
