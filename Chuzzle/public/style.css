@@ -88,6 +88,11 @@ aside {
     text-align: center;
     border: black solid 1px;
 }
+.piece-image{
+    height:90%;
+    width:90%;
+    user-select: none;
+}
 #create-menu{
     position: absolute;
     top: 50%;

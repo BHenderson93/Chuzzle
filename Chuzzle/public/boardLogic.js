@@ -434,8 +434,16 @@ class GameBoard {
             for (let col = 0; col < 8; col++) {
                 let piece = this.board[col][row]
                 let square = document.getElementById(`${col}${row}`)
+                if(square.firstChild){
+                    console.log('Removing child')
+                    square.removeChild(square.firstChild)
+                }
                 if (typeof (this.board[col][row]) === 'object') {
-                    square.innerText = piece.img
+                    //square.innerText = piece.img
+                    let pieceImage = document.createElement('img')
+                    pieceImage.classList.add('piece-image')
+                    pieceImage.src = `/ChessPieces/${piece.side.toLowerCase()}${piece.name}.png`
+                    square.appendChild(pieceImage)
                     square.style.color = piece.side === 'White' ? 'orange' : 'blue'
 
                 } else {
@@ -616,15 +624,35 @@ class Pawn extends Piece {
 const initializeScreen = () => {
     document.getElementById('board-container').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
-        gameBoard.tryMove[0] = e.target.id.split('')
+        e.preventDefault();
+        document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
+        let myMove
+        if(e.target.classList.contains('piece-image')){
+            console.log('is piece image')
+            myMove = e.target.parentNode.id.split('')
+        }else{
+            console.log('is not piece image')
+            myMove = e.target.id.split('')
+        }
+        console.log('move down is ' , myMove)
+        gameBoard.tryMove[0] = myMove
     })
     document.getElementById('board-container').addEventListener('mouseup', (e) => {
         //console.log(e.target.id)
-        gameBoard.tryMove[1] = e.target.id.split('')
-        gameBoard.pieceAttemptsMove()
+        let myMove
+        if(e.target.classList.contains('piece-image')){
+            console.log('is piece image')
+            myMove = e.target.parentNode.id.split('')
+        }else{
+            console.log('is not piece image')
+            myMove = e.target.id.split('')
+        }
+        console.log('move up is ' , myMove)
+        document.body.style.cursor = ''
+        gameBoard.tryMove[1] = myMove
+        gameBoard.pieceAttemptsMove(false , true)
     })
     //insert element sticks to mouse listener on click somewhere in here
-
     gameBoard.initializeBoard()
 }
 
