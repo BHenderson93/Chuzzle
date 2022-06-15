@@ -20,14 +20,33 @@
         <div class="menu-item"><img id="b" src="/ChessPieces/blackBishop.png" class="piece-image"></div>
         <div class="menu-item"><img id="P" src="/ChessPieces/whitePawn.png" class="piece-image"></div>
         <div class="menu-item"><img id="p" src="/ChessPieces/blackPawn.png" class="piece-image"></div>
+        <div class="menu-item"><button id="Eraser">Eraser</button></div>
     </div>
     <div class="option-list">
-        <div class="menu-option"><button>Start Recording Solution</button></div>
-        <div class="menu-option"><button>End Recording Solution</button></div>
-        <div class="menu-option"><button>Replay</button></div>
-        <div class="menu-option"><button>Reset Board</button></div>
+        <div class="menu-option"><button class="menu-btn" onclick="startRecording()">Start Recording Solution</button>
+        </div>
+        <div class="menu-option"><button class="menu-btn" onclick="endRecording()">End Recording Solution</button></div>
+        <div class="menu-option"><button class="menu-btn" onclick="replaySolution()">Replay</button></div>
+        <div class="menu-option"><button class="menu-btn" onclick="clearScreen()">Reset Board</button></div>
         <br />
-        <div class="menu-option"><button>Publish!</button></div>
+        <div class="menu-option">
+            <form action="/game/create" method="POST">
+                <div class="hidden">
+                    <input type="text" name="fen" id="fen-tracker" class="hidden">
+                    <input type="text" name="moves" id="moves-tracker" class="hidden">
+                    <input type="text" name="createdBy" id="create-tracker" class="hidden">
+                </div>
+                <button type="submit">Publish!</button>
+            </form>
+        </div>
+    </div>
+    <div id="rules-list">
+        Drag and drop pieces onto the board
+        Make sure you have a black king AND a white king
+        When the position is ready, hit Start Recording
+        When you're finished hit End Recording, check it with Replay, and Publish it if you're ready!
+        Illegal moves will not be recorded
+        Currently this program cannot: detect stalemates, promote to knights, and allows a users king to be in check when their pawn captures. Please avoid these.
     </div>
 </div>
 

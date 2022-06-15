@@ -71,14 +71,28 @@ router.get('/standard-game', (req, res) => {
 })
 
 router.get('/tactic/user', (req, res) => {
-    Tactic.findOne({}).then((tactic) => {
+    Tactic.count().exec(function(err,count){
+        let random = Math.floor(Math.random()*count)
+        Tactic.findOne({}).skip(random).then((tactic) => {
+            res.redirect(`/game/tactic/user/${tactic._id}`)
+        }).catch((err) => {
+            console.log(err)
+        })
+    })
+})
+
+router.get('/tactic/user/:id' , (req,res)=>{
+    Tactic.findById(req.params.id).then((tactic) => {
         console.log(tactic)
+        console.log(tactic.moves)
+        let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
         let moves = tacticMoveConverter(tactic)
         res.render('chess/tactic', {
+            style: '/game/tactic/user',
             fen: `${tactic.fen}`,
             moves: `${moves}`,
             id: `${tactic.puzzleid}`,
-            currMove:`0`
+            currMove: `${currMove}`
         })
     }).catch((err) => {
         console.log(err)
@@ -91,16 +105,23 @@ router.get('/tactic/api', (req, res) => {
         let random = Math.floor(Math.random() * count)
         apiTactic.findOne().skip(random)
             .then((tactic) => {
-                console.log(tactic)
-                let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
-                let moves = tacticMoveConverter(tactic)
-                res.render('chess/tactic', {
-                    fen: `${tactic.fen}`,
-                    moves: `${moves}`,
-                    id: `${tactic.puzzleid}`,
-                    currMove: `${currMove}`
+                res.redirect(`/game/tactic/api/${tactic._id}`)
                 })
             })
+    })
+
+router.get('/tactic/api/:id' , (req,res)=>{
+    apiTactic.findById(req.params.id).then((tactic) => {
+        console.log(tactic)
+        let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
+        let moves = tacticMoveConverter(tactic)
+        res.render('chess/tactic', {
+            style: '/game/tactic/api',
+            fen: `${tactic.fen}`,
+            moves: `${moves}`,
+            id: `${tactic.puzzleid}`,
+            currMove: `${currMove}`
+        })
     })
 })
 
@@ -108,4 +129,15 @@ router.get('/create', (req, res) => {
     res.render('chess/create')
 })
 
+
+router.post('/create', (req, res) => {
+    req.body.moves = req.body.moves.split(',')
+    Tactic.create(req.body).then((tact) => {
+        console.log(tact)
+    }).catch((err) => {
+        console.log(err)
+    }).finally(() => {
+        res.redirect('/game/create')
+    })
+})
 module.exports = router

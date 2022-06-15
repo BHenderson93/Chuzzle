@@ -5,8 +5,8 @@ const tacticSchema = new Schema({
     fen: { type: String, required: true },
     moves: [{ type: String , required:true}],
     puzzleid:{type:String , default:'User Created'},
-    createdBy: { type: Schema.Types.ObjectId },
-    comments: { type: Schema.Types.ObjectId },
+    createdBy: String,
+    comments: [{ type: Schema.Types.ObjectId }],
     totalAttempts: { type: Number , default:0},
     successes: { type: Number , default:0},
     fails: { type: Number,default:0}

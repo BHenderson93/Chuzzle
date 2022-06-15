@@ -14,12 +14,13 @@ class GameBoard {
     }
 
     pieceAttemptsMove() {
-        console.log('trymove is' ,this.tryMove)
-        this.moveString = this.tryMove[0].join('')+this.tryMove[1].join('')
-        console.log('moveString is' , this.moveString)
+        console.log('trymove is', this.tryMove)
+        this.moveString = this.tryMove[0].join('') + this.tryMove[1].join('')
+        console.log('moveString is', this.moveString)
         //console.log(this.tryMove)
         let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
         let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
+        console.log('start,end',start,end)
         let piece = this.board[start[0]][start[1]]
         let movementPath = false
 
@@ -36,7 +37,7 @@ class GameBoard {
         }
 
         const findMoveArray = (currentPiece, endLocation) => {
-            console.log('currPiece' , currentPiece)
+            //console.log('currPiece', currentPiece)
             for (let moveArray of currentPiece.allMoves) {
                 for (let array of moveArray) {
                     if (array[0] === endLocation[0] && array[1] === endLocation[1]) {
@@ -49,20 +50,26 @@ class GameBoard {
 
         const pawnCaptures = () => {
             //statement for capturing a piece by a pawn diagonally
+            let startContents, endContents
             if (typeof (this.board[end[0]][end[1]]) === 'object' && (end[0] === piece.location[0] + piece.movementStyle[0][0] && (end[1] === piece.location[1] + 1 || end[1] === piece.location[1] - 1))) {
                 console.log('capturing w/ pawn')
                 this.board[start[0]][start[1]] = ''
-                this.captured.push(this.board[end[0]][end[1]])
+                endContents = this.captured.push(this.board[end[0]][end[1]])
                 this.board[end[0]][end[1]] = piece
                 piece.location = [end[0], end[1]]
                 piece.initialMoveAvailable = false
-                if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
-                    console.log('attempting pawn promote')
-                    this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
+                if (noKingChecks) {
+                    if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
+                        console.log('attempting pawn promote')
+                        this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
+                    }
+                    currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
+                    this.redrawBoard()
+                } else {
+                    this.board[end[0]][end[1]] = endContents
+                    this.board[start[0]][start[1]] = piece
+                    piece.location = [start[0], start[1]]
                 }
-
-                currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
-                this.redrawBoard()
                 if (!noKingChecks()) {
                     if (isCheckmate()) {
                         console.log('Checkmate!')
@@ -73,14 +80,23 @@ class GameBoard {
             } else if ((this.enPassant && end[1] === this.enPassant[1]) && (end[0] === piece.location[0] + piece.movementStyle[0][0] && (end[1] === piece.location[1] + 1 || end[1] === piece.location[1] - 1))) {
                 console.log('en passanted')
                 this.board[start[0]][start[1]] = ''
-                this.captured.push(this.board[this.enPassant[0]][this.enPassant[1]])
+                endContents = this.board[this.enPassant[0]][this.enPassant[1]]
                 this.board[this.enPassant[0]][this.enPassant[1]] = ''
                 this.board[end[0]][end[1]] = piece
                 piece.location = [end[0], end[1]]
-                piece.initialMoveAvailable = false
-                currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
-                this.enPassant = null
-                this.redrawBoard()
+                if (noKingChecks()) {
+                    piece.initialMoveAvailable = false
+                    currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
+                    this.enPassant = null
+                    this.redrawBoard()
+                } else {
+                    this.board[start[0]][start[1]] = piece
+                    this.board[this.enPassant[0]][this.enPassant[1]] = endContents
+                    this.board[end[0]][end[1]] = ''
+                    piece.location = [start[0], start[1]]
+                    return false
+                }
+
                 if (!noKingChecks()) {
                     if (isCheckmate()) {
                         console.log('Checkmate!')
@@ -259,7 +275,7 @@ class GameBoard {
                                     endContents = this.board[move[0]][move[1]]
                                     this.board[move[0]][move[1]] = currPiece
                                     currPiece.location = move
-                                    this.board[row][col]=''
+                                    this.board[row][col] = ''
                                     if (noKingChecks()) {
                                         this.board[row][col] = startContents
                                         this.board[move[0]][move[1]] = endContents
@@ -433,8 +449,8 @@ class GameBoard {
             for (let col = 0; col < 8; col++) {
                 let piece = this.board[col][row]
                 let square = document.getElementById(`${col}${row}`)
-                if(square.firstChild){
-                    console.log('Removing child')
+                if (square.firstChild) {
+                    //console.log('Removing child')
                     square.removeChild(square.firstChild)
                 }
                 if (typeof (this.board[col][row]) === 'object') {
@@ -452,6 +468,74 @@ class GameBoard {
                 typeof (this.board[col][row]) === 'object' ? this.board[col][row].makeAllMovesArray() : null
                 //placeholder for pieces
             }
+        }
+        if( recordingOn === true){
+            let solution =''
+            console.log('try move is' ,this.tryMove)
+            moveRecord.push(this.tryMove.slice())
+            solution+=String(this.tryMove[0][1])
+            solution+=String(this.tryMove[0][0])
+            solution+=String(this.tryMove[1][1])
+            solution+=String(this.tryMove[1][0])
+
+            let returnSolution = ''
+            switch (solution[0]){
+                case '0':
+                returnSolution+= 'a'
+                break
+                case '1':
+                returnSolution+= 'b'
+                break
+                case '2':
+                returnSolution+= 'c'
+                break
+                case '3':
+                returnSolution+= 'd'
+                break
+                case '4':
+                returnSolution+= 'e'
+                break
+                case '5':
+                returnSolution+= 'f'
+                break
+                case '6':
+                returnSolution+= 'g'
+                break
+                case '7':
+                returnSolution+= 'h'
+                break
+            }
+            returnSolution+=(8-Number(solution[1]))
+
+            switch (solution[2]){
+                case '0':
+                returnSolution+= 'a'
+                break
+                case '1':
+                returnSolution+= 'b'
+                break
+                case '2':
+                returnSolution+= 'c'
+                break
+                case '3':
+                returnSolution+= 'd'
+                break
+                case '4':
+                returnSolution+= 'e'
+                break
+                case '5':
+                returnSolution+= 'f'
+                break
+                case '6':
+                returnSolution+= 'g'
+                break
+                case '7':
+                returnSolution+= 'h'
+                break
+            }
+            returnSolution+=(8-Number(solution[3]))
+            console.log('returning solution record' , solution, returnSolution)
+            record.push(returnSolution)
         }
     }
 
@@ -522,27 +606,31 @@ class GameBoard {
         return newFEN
     }
 
-    fenCreater (){
+    fenCreater() {
         let fen = ''
-        for(let row = 0 ; row < 8 ; row++){
+        for (let row = 0; row < 8; row++) {
             let empty = 0
-            for( let col = 0 ; col < 8 ; col++){
+            for (let col = 0; col < 8; col++) {
                 let sq = this.board[row][col]
-                if (typeof(sq)!== 'object'){
+                if (typeof (sq) !== 'object') {
                     empty++
-                }else{
-                    if (empty > 0){
-                        fen+= String(empty)
+                } else {
+                    if (empty > 0) {
+                        fen += String(empty)
                         empty = 0
                     }
-                    fen+=sq.img
+                    if(sq.side === 'Black'){
+                        fen += String(sq.img).toLowerCase()
+                    }else{
+                        fen += sq.img
+                    }
                 }
             }
-            if(empty > 0){
+            if (empty > 0) {
                 fen += empty
                 empty = 0
             }
-            if( row < 7 ){
+            if (row < 7) {
                 fen += '/'
             }
         }
@@ -566,8 +654,8 @@ class Piece {
     }
 
     makeAllMovesArray() {
-        console.log('in makeAll')
-        console.log(this.location)
+        //console.log('in makeAll')
+        //console.log(this.location)
         this.allMoves = []
         let tempMax = this.name === 'Pawn' ? this.initialMoveAvailable ? this.movementMax + 1 : this.movementMax : this.movementMax
         for (let movement of this.movementStyle) {
@@ -584,7 +672,7 @@ class Piece {
             }
             this.allMoves.push(moveStyleArray)
         }
-        console.log(this.allMoves)
+        //console.log(this.allMoves)
     }
 
 }
@@ -655,68 +743,139 @@ class Pawn extends Piece {
 const initializeScreen = () => {
     document.getElementById('create-menu').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
-        e.preventDefault();
-            document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
-        
-
-            if(e.target.parentNode.classList.contains('square')){
+        if (recordingOn === true) {
+            if(e.target.classList.contains('piece-image')){
+                e.preventDefault();
+                document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
                 gameBoard.tryMove[0] = e.target.parentNode.id.split('')
-            }else if(e.target.classList.contains('piece-image')){
-            console.log('menu clicked')
-            currentSelection = e.target.id
-            console.log('piece selected is ',currentSelection)
-        } 
+            }
+
+        } else {
+            if (!e.target.classList.contains('menu-btn')) {
+                e.preventDefault();
+                document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
+                if (e.target.parentNode.classList.contains('square')) {
+                    gameBoard.tryMove[0] = e.target.parentNode.id.split('')
+                } else if (e.target.classList.contains('piece-image')) {
+                    //console.log('menu clicked')
+                    currentSelection = e.target.id
+                    //console.log('piece selected is ', currentSelection)
+                } else {
+                    currentSelection = e.target.id
+                }
+            }
+        }
+
+
     })
+
     document.addEventListener('mouseup', (e) => {
         //console.log(e.target.id)
         document.body.style.cursor = ``
         let workingID
-        if(!e.target.id){
+        if (!e.target.id) {
             workingID = e.target.parentNode.id
-        }else{
+        } else {
             workingID = e.target.id
         }
-    if(e.target.classList.contains('square') || e.target.parentNode.classList.contains('square')){
-        if(currentSelection !== ''){
-            console.log('attempting to create')
-            let boardcoords = workingID.split('')
-            boardcoords[0] = Number(boardcoords[0])
-            boardcoords[1] = Number(boardcoords[1])
-            let piece
-            currentSelection === 'Q' ? piece = new Queen('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'K' ? piece = new King('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'R' ? piece = new Rook('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'B' ? piece = new Bishop('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'N' ? piece = new Knight('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'P' ? piece = new Pawn('White', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'q' ? piece = new Queen('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'k' ? piece = new King('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'r' ? piece = new Rook('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'b' ? piece = new Bishop('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'n' ? piece = new Knight('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'p' ? piece = new Pawn('Black', [boardcoords[0],boardcoords[1]]) : null
-            currentSelection === 'Eraser' ? piece = '' :null
-            gameBoard.board[boardcoords[0]][boardcoords[1]] = piece
-            currentSelection=''
-            gameBoard.redrawBoard()
-        }else{
-            console.log('attempt moved called')
-                gameBoard.tryMove[1] = workingID.split('')
-                gameBoard.pieceAttemptsMove()
-                gameBoard.redrawBoard()
-            }
 
-        }else{
-        currentSelection = ''
-    }}
+
+            if (e.target.classList.contains('square') || e.target.parentNode.classList.contains('square')) {
+                if (currentSelection !== '') {
+                    //console.log('attempting to create')
+                    let boardcoords = workingID.split('')
+                    boardcoords[0] = Number(boardcoords[0])
+                    boardcoords[1] = Number(boardcoords[1])
+                    let piece
+                    currentSelection === 'Q' ? piece = new Queen('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'K' ? piece = new King('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'R' ? piece = new Rook('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'B' ? piece = new Bishop('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'N' ? piece = new Knight('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'P' ? piece = new Pawn('White', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'q' ? piece = new Queen('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'k' ? piece = new King('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'r' ? piece = new Rook('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'b' ? piece = new Bishop('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'n' ? piece = new Knight('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'p' ? piece = new Pawn('Black', [boardcoords[0], boardcoords[1]]) : null
+                    currentSelection === 'Eraser' ? piece = '' : null
+                    gameBoard.board[boardcoords[0]][boardcoords[1]] = piece
+                    currentSelection = ''
+                    gameBoard.redrawBoard()
+                } else {
+                    if(recordingOn === true){
+                        console.log('attempt moved called')
+                        gameBoard.tryMove[1] = workingID.split('')
+                        gameBoard.pieceAttemptsMove()
+                    }
+
+
+                }
+
+            } else {
+                currentSelection = ''
+            }
+        }
     )
     //insert element sticks to mouse listener on click somewhere in here
 
-    console.log('initi board')
+    //console.log('initi board')
     gameBoard.initializeBoard()
 }
 
+const clearScreen = () => {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            gameBoard.board[row][col] = ''
+        }
+    }
+    recordingOn = false
+    currentTurn = 0
+    gameBoard.redrawBoard()
+    return true
+}
+
+const startRecording = () =>{
+    currentTurn === 0 ? startMove = ' w' : ' b'
+    recordingOn = true
+    record = []
+    moveRecord = []
+    fen = gameBoard.fenCreater()
+    fen+=startMove
+    clearInterval(playback)
+}
+
+const endRecording = () =>{
+    recordingOn = false
+    document.getElementById('fen-tracker').value = fen
+    document.getElementById('moves-tracker').value = record
+    document.getElementById('create-tracker').value = 'Session Username'
+}
+let playback
+const replaySolution = () =>{
+    startMove === ' w' ? currentTurn=0:currentTurn=1
+    gameBoard = new GameBoard(fen)
+    gameBoard.initializeBoard()
+    let moveIndex = 0
+    const intervalFunction = () =>{
+
+        gameBoard.tryMove = moveRecord[moveIndex]
+        gameBoard.pieceAttemptsMove(false, false)
+        moveIndex++
+        if (moveIndex === moveRecord.length){
+            clearInterval(playback)
+        }
+    }
+
+     playback = setInterval(intervalFunction, 1000)
+}
+let startmove = ''
+let fen
+let recordingOn = false
+let moveRecord = []
+let record = []
 let currentSelection = ''
 let currentTurn = 0
-const gameBoard = new GameBoard(emptyFEN)
+let gameBoard = new GameBoard(emptyFEN)
 initializeScreen()

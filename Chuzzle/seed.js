@@ -15,8 +15,18 @@ const starterUsers = [{
 ]
 
 const starterTactics = [{
-    fen:'2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1',
+    fen:'2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1 w',
     moves:["c3d5","e6d5","c2c8","f8c8"],
+},{
+    fen: 'BQQBQQQQ/RRRRQQQK/NNQBQRNR/NQQBQNQB/BNNPnRBR/QQNNPPPQ/1RQPQQQQ/kBQQQQQQ w',
+    moves: [ 'c3a2', 'e4g5' ],
+    puzzleid: 'User Created',
+    createdBy: 'Bruce',
+},{
+    fen: 'rnbqk1nr/pppp1ppp/8/2b1p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b',
+    moves: [ 'a7a6', 'h5f7' ],
+    puzzleid: 'User Created',
+    createdBy: 'Bruce',
 }
 ]
 //API section
@@ -28,7 +38,7 @@ const options = {
 	}
 };
 
-fetch('https://chess-puzzles.p.rapidapi.com/?rating=1500&themesType=ALL&count=25', options)
+fetch('https://chess-puzzles.p.rapidapi.com/?rating=1500&themesType=ALL&count=250', options)
 	.then(response => response.json())
 	.then(response => {
         apiTactics.deleteMany({}).then(() => {

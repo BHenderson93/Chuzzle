@@ -13,6 +13,8 @@ header {
 
 main {
     height: 80vh;
+    position:relative;
+    left: 10vw;
 }
 
 h1{

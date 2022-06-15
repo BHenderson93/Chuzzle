@@ -3,10 +3,17 @@
 
 {% block content%}
 
+<div id="create-menu">
+    <div id="board-container-independent">
 
-<div id="board-container">
-
+    </div>
+    <form action="{{style}}" method="GET">
+        <button id="success-btn" class="button">Move on to next</button>
+    </form>
 </div>
+
+
+
 
 <div class="hidden">
     <div class="hidden" id="fen">{{fen}}</div>
