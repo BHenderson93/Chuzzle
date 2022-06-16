@@ -1,6 +1,5 @@
 const mongoose = require('./M-connection')
 const { Schema, model } = mongoose
-
 const tacticSchema = new Schema({
     fen: { type: String, required: true },
     moves: [{ type: String , required:true}],

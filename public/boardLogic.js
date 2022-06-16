@@ -639,6 +639,7 @@ const initializeScreen = () => {
         console.log('move down is ' , myMove)
         gameBoard.tryMove[0] = myMove
     })
+
     document.addEventListener('mouseup' , ()=>{
         let selected = document.getElementById('selected')
         selected.classList.remove('hidden')
@@ -646,7 +647,7 @@ const initializeScreen = () => {
         selected.id = ''
     })
     document.getElementById('board-container').addEventListener('mouseup', (e) => {
-        //console.log(e.target.id)
+        //console.log(e.target.id)//
         let myMove
         if(e.target.classList.contains('piece-image')){
             console.log('is piece image')
