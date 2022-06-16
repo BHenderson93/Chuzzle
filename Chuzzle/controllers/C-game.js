@@ -280,8 +280,21 @@ router.post('/comment/delete' , (req,res)=>{
     //delete route for comment
 })
 
-router.post('/tactic/user/:id/delete' , (req,res)=>{
+router.delete('/tactic/user/:id' , (req,res)=>{
     //delete route for tactic
+    Tactic.deleteOne({_id:req.params.id}).then((del)=>{
+        console.log('tactic deleted',del)
+        User.updateOne({_id:req.body.createdById} , {$pull:{tacticsCreatedList: req.params.id}}).then((upd)=>{
+            console.log('user updated' , upd)
+            Comment.deleteMany({location:req.params.id}).then((dels)=>{
+                console.log('comments deleted' , dels)
+            })
+        })
+    }).catch((err)=>{
+        console.log(err)
+    }).finally(()=>{
+        res.redirect(`/users/profile/${req.session.name}`)
+    })
 })
 
 module.exports = router

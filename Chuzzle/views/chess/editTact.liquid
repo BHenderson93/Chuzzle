@@ -37,6 +37,12 @@
                 <button type="submit">Confirm Edits!</button>
             </form>
         </div>
+        <div>
+            <h1>Danger section!</h1>
+            <form action="/game/tactic/user/{{tactic._id}}?_method=DELETE" method="POST">
+                <input class="hidden" type="text" name="createdById" id="" value="{{tactic.createdById}}">
+                <button>Delete this tactic. Cannot be undone.</button></form>
+        </div>
     </div>
     <div id="rules-list">
         <ul>
