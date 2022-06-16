@@ -7,7 +7,7 @@ const apiTacticSchema = new Schema({
     puzzleid:{type:String , default:'API Generated', required:true},
     createdBy:{type:String , default:'API'},
     difficulty:{type:Number , default: 1500},
-    comments: [{ type: Schema.Types.ObjectId , default:''}],
+    comments: [{ type:Schema.Types.ObjectId, default:''}],
     totalAttempts: { type: Number , default:0},
     successes: { type: Number , default:0},
     fails: { type: Number,default:0}

@@ -3,6 +3,7 @@ const router = express.Router()
 const Tactic = require('../models/M-tactic')
 const apiTactic = require('../models/M-apiTactic')
 const Comment = require('../models/M-comment')
+const User = require('../models/M-user')
 
 const tacticMoveConverter = (tacticJSON) => {
     let solutionArr = []
@@ -66,7 +67,7 @@ const tacticMoveConverter = (tacticJSON) => {
 }
 
 router.get('/standard', (req, res) => {
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
     }
     const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
@@ -75,11 +76,11 @@ router.get('/standard', (req, res) => {
 })
 
 router.get('/tactic/user', (req, res) => {
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
-        Tactic.count().exec(function(err,count){
-            let random = Math.floor(Math.random()*count)
+    } else {
+        Tactic.count().exec(function (err, count) {
+            let random = Math.floor(Math.random() * count)
             Tactic.findOne({}).skip(random).then((tactic) => {
                 res.redirect(`/game/tactic/user/${tactic._id}`)
             }).catch((err) => {
@@ -89,19 +90,19 @@ router.get('/tactic/user', (req, res) => {
     }
 })
 
-router.get('/tactic/user/:id' , (req,res)=>{
-    if (!req.session.loggedIn){
+router.get('/tactic/user/:id', (req, res) => {
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
+    } else {
         Tactic.findById(req.params.id).then((tactic) => {
-            Comment.find({location: tactic._id}).then((commentList)=>{
+            Comment.find({ location: tactic._id }).then((commentList) => {
                 console.log(tactic)
                 console.log(tactic.moves)
                 let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
                 let moves = tacticMoveConverter(tactic)
                 res.render('chess/tactic', {
                     style: '/game/tactic/user',
-                    tactic:tactic,
+                    tactic: tactic,
                     moves: `${moves}`,
                     currMove: `${currMove}`,
                     commentList
@@ -116,78 +117,129 @@ router.get('/tactic/user/:id' , (req,res)=>{
 })
 
 router.get('/tactic/api', (req, res) => {
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
+    } else {
         apiTactic.count().exec(function (err, count) {
             let random = Math.floor(Math.random() * count)
             apiTactic.findOne().skip(random)
                 .then((tactic) => {
                     res.redirect(`/game/tactic/api/${tactic._id}`)
-                    })
                 })
+        })
     }
     //pick a random one
 
-    })
+})
 
-router.get('/tactic/api/:id' , (req,res)=>{
-    if (!req.session.loggedIn){
+router.get('/tactic/api/:id', (req, res) => {
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
+    } else {
         apiTactic.findById(req.params.id).then((tactic) => {
-            console.log(tactic)
-            let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
-            let moves = tacticMoveConverter(tactic)
-            res.render('chess/tactic', {
-                style: '/game/tactic/api',
-                tactic:tactic,
-                moves: `${moves}`,
-                currMove: `${currMove}`
+            Comment.find({location:tactic._id}).then((commentList)=>{
+                console.log(tactic)
+                let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
+                let moves = tacticMoveConverter(tactic)
+                res.render('chess/tactic', {
+                    style: '/game/tactic/api',
+                    tactic: tactic,
+                    moves: `${moves}`,
+                    currMove: `${currMove}`,
+                    commentList
+                })
             })
+
         })
     }
 })
 
 router.get('/create', (req, res) => {
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
+    } else {
         res.render('chess/create')
     }
 })
 
 
 router.post('/create', (req, res) => {
-    if (!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }else{
-        req.body.createdBy = req.session.name
-        req.body.moves = req.body.moves.split(',')
-        Tactic.create(req.body).then((tact) => {
-            console.log(tact)
-        }).catch((err) => {
-            console.log(err)
-        }).finally(() => {
-            res.redirect('/game/create')
+    } else {
+
+        User.findById(req.session.userId).then((user) => {
+            console.log('user is', user)
+            let newTactic = {
+                fen: req.body.fen,
+                moves: req.body.moves.split(','),
+                createdBy: user.name,
+                createdById: user._id,
+            }
+            Tactic.create(newTactic).then((tact) => {
+                console.log(tact)
+                User.updateOne({ _id: user._id }, { $push: { tacticsCreatedList: tact._id } })
+                    .then((result) => {
+                        console.log(result)
+                    })
+            }).catch((err) => {
+                console.log('error on id lookup through req.sess')
+                console.log(err)
+            }).finally(() => {
+                res.redirect('/game/create')
+            })
         })
+
     }
 })
 
-router.post('/tactic/user/:id' , (req,res)=>{
-    
+router.post('/tactic/user/:id', (req, res) => {
+    if(!req.body.body){
+        console.log('redirecting')
+        res.redirect(`/game/tactic/user/${req.params.id}`)
+    }else{
     let newComment = {
         body: req.body.body,
-        user: req.session.id,
+        user: req.session.userId,
         username: req.session.name,
-        location:req.params.id,
+        location: req.params.id,
     }
-    Comment.create(newComment).then((comment)=>{
-        console.log('Comment created' ,comment)
-        res.redirect(`/game/tactic/user/${req.params.id}`)
-    }).catch((err)=>{
+    Comment.create(newComment).then((comment) => {
+        Tactic.updateOne({ _id: req.params.id }, { $push: { comments: comment._id } }).then(() => {
+            User.updateOne({ _id: req.session.userId }, { $push: { commentsCreatedList: comment._id } }).then((result) => {
+                console.log('Comment created', comment, result)
+                res.redirect(`/game/tactic/user/${req.params.id}`)
+            })
+        })
+    }).catch((err) => {
         console.log(err)
         res.redirect(`/game/tactic/user/${req.params.id}`)
-    })
+    })}
+})
+router.post('/tactic/api/:id', (req, res) => {
+    console.log('rq body is ' , req.body.body)
+    if(!req.body.body){
+        console.log('redirecting')
+        res.redirect(`/game/tactic/api/${req.params.id}`)
+    }else{
+        let newComment = {
+            body: req.body.body,
+            user: req.session.userId,
+            username: req.session.name,
+            location: req.params.id,
+        }
+        Comment.create(newComment).then((comment) => {
+            apiTactic.updateOne({ _id: req.params.id }, { $push: { comments: comment._id } }).then(() => {
+                User.updateOne({ _id: req.session.userId }, { $push: { commentsCreatedList: comment._id } }).then((result) => {
+                    console.log('Comment created', comment, result)
+                    res.redirect(`/game/tactic/api/${req.params.id}`)
+                })
+            })
+        }).catch((err) => {
+            console.log(err)
+            res.redirect(`/game/tactic/user/${req.params.id}`)
+        })
+    }
+    
 })
 module.exports = router

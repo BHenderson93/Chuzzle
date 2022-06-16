@@ -5,9 +5,9 @@ const userSchema = new Schema ({
     name:{type:String , required: true , unique:true},
     password:{type:String, required:true},
     tacticRating:{type:Number , default:0},
-    standardGameList: [ {type:Schema.Types.ObjectId, ref:'Games' , default:null} ],
-    tacticsCreatedList: [ {type:Schema.Types.ObjectId , ref:'Created Tactic', default:null}],
-    commentsCreatedList: [ {type: Schema.Types.ObjectId , ref:'Comments' , default:null}],
+    standardGameList: [ {type:String, ref:'Games' , default:null} ],
+    tacticsCreatedList: [ {type:String , ref:'Created Tactic', default:null}],
+    commentsCreatedList: [ {type: String , ref:'Comments' , default:null}],
     rank: Number
 },
 {

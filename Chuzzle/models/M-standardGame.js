@@ -7,7 +7,7 @@ const gameSchema = new Schema ({
     userBlack:{type: Schema.Types.ObjectId , required:true},
     currentPosition: {type:String , required:true},
     currentTurn:{type:Number , default:0 , required:true},
-    comments:[{type:Schema.Types.ObjectId}],
+    comments:[{type:String}],
     active:{type:Boolean , default:true}
 })
 

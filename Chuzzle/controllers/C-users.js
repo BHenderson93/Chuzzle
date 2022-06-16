@@ -33,17 +33,16 @@ router.get('/profile/:username', (req, res) => {
     console.log('checking for name ' ,req.session.name)
     User.findOne({ name: req.session.name }).then((user) => {
         console.log('Found user' , user.name , 'Moving on to tactics')
-        Tactics.find({ createdBy: user.name }).then((tactList) => {
-            console.log('found tactics' , tactList.length)
-            Comments.find({ user: user._id }).then((comList) => {
-                console.log('found my comments' , comList.length)
+        Tactics.find({createdById:user._id}).then((tactList)=>{
+            Comments.find({user:user._id}).then((comList)=>{
                 res.render('users/profile', {
                     user,
-                    comList,
-                    tactList
+                    tactList,
+                    comList
                 })
             })
         })
+                
     })
 })
 
@@ -67,12 +66,12 @@ router.post("/login", async (req, res) => {
     User.findOne({ name }).then(async (user) => {
         if (user) {
             console.log('found the user')
+            const userIdString=user._id.toString()
             const result = await bcrypt.compare(password, user.password)
             if (result) {
                 req.session.name = name
-                req.session.id = user._id
+                req.session.userId = userIdString
                 req.session.loggedIn = true
-                console.log('session name is ' , req.session.name)
                 res.redirect('/game/tactic/api')
             } else {
                 console.log('Trouble matching PW')

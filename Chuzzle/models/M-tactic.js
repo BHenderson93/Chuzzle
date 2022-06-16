@@ -6,6 +6,7 @@ const tacticSchema = new Schema({
     moves: [{ type: String , required:true}],
     puzzleid:{type:String , default:'User Created'},
     createdBy: {type:String , default:'Anonymous User'},
+    createdById:{type:Schema.Types.ObjectId , required:true},
     comments: [{ type: Schema.Types.ObjectId}],
     totalAttempts: { type: Number , default:0},
     successes: { type: Number , default:0},

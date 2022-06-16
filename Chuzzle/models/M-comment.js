@@ -4,9 +4,9 @@ const { Schema, model } = mongoose
 
 const commentSchema = new Schema ({
     body:{type:String , required:true},
-    user:{type:String , required:true},
+    user:{type:Schema.Types.ObjectId, required:true},
     username:{type:String , required:true},
-    location:{type:String , required:true}
+    location:{type:Schema.Types.ObjectId , required:true}
 },{
     timestamps:true
 })
