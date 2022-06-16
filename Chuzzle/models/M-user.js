@@ -2,7 +2,7 @@ const mongoose = require('./M-connection')
 const { Schema, model } = mongoose
 
 const userSchema = new Schema ({
-    name:{type:String , require: true , unique:true},
+    name:{type:String , required: true , unique:true},
     password:{type:String, required:true},
     tacticRating:{type:Number , default:0},
     standardGameList: [ {type:Schema.Types.ObjectId, ref:'Games' , default:null} ],

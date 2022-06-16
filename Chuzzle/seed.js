@@ -27,6 +27,16 @@ const starterTactics = [{
     moves: [ 'a7a6', 'h5f7' ],
     puzzleid: 'User Created',
     createdBy: 'Bruce',
+},{
+    fen:'1KR1Q2R/PPn1PPBP/5NP1/8/5q2/2n2pb1/ppp3pp/1kr2b1r w',
+    moves: ['f6h5', 'c7a6', 'b8a8', 'f4b8', 'c8b8', 'a6c7'],
+    puzzleid:'SmotheredM8',
+    createdBy:'Mr.Bruce'
+},{
+    fen: '6r1/1k6/p1p1b3/1p2B3/1P3P2/P5Kp/8/7R w',
+    moves: ['g3h2' , 'g8g2'],
+    puzzleid: 'Rookm8',
+    createdBy:'Mr.Bruce'
 }
 ]
 //API section

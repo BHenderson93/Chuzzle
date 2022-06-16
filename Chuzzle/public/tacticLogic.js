@@ -372,18 +372,22 @@ class GameBoard {
 
         if(this.moveString === moves[this.moveIndex]){
             console.log('Correct move!')
+            
             console.log(this.moveIndex, moves.length)
             if(this.moveIndex+1 === moves.length){
+                sideToPlay.innerText = 'Correct sequence! Puzzle complete.'
                 console.log('Puzzle complete')
             }else{
+                sideToPlay.innerText = currentTurn === 1 ? 'White to move' : 'Black to move'
                 this.moveIndex++
                 if(myMove){
-                    console.log('this my my move')
+                    console.log('this my move')
                     this.pieceAttemptsMove(true , false)
                 }
             }
         }else{
             console.log('Wrong move!')
+            sideToPlay.innerText = currTurn === 0 ? 'White to move' : 'Black to move'
             currentTurn = currTurn
             this.moveIndex = 0
             this.resetBoard()
@@ -693,7 +697,6 @@ class Pawn extends Piece {
 
 
 // #endregion
-
 const initializeScreen = () => {
     document.getElementById('board-container-independent').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
@@ -702,6 +705,8 @@ const initializeScreen = () => {
         let myMove
         if(e.target.classList.contains('piece-image')){
             console.log('is piece image')
+            e.target.classList.add('hidden')
+            e.target.id = 'selected'
             myMove = e.target.parentNode.id.split('')
         }else{
             console.log('is not piece image')
@@ -709,6 +714,12 @@ const initializeScreen = () => {
         }
         console.log('move down is ' , myMove)
         gameBoard.tryMove[0] = myMove
+    })
+    document.addEventListener('mouseup' , ()=>{
+        let selected = document.getElementById('selected')
+        selected.classList.remove('hidden')
+        document.body.style.cursor =''
+        selected.id = ''
     })
     document.getElementById('board-container-independent').addEventListener('mouseup', (e) => {
         //console.log(e.target.id)
@@ -728,6 +739,8 @@ const initializeScreen = () => {
     //insert element sticks to mouse listener on click somewhere in here
     gameBoard.initializeBoard()
 }
+let sideToPlay = document.getElementById('side-to-play')
+
 let currTurn = Number(document.getElementById('currMove').innerText)
 let currentTurn = currTurn
 console.log('Starting on turn ' , currentTurn)
@@ -735,7 +748,6 @@ let fen = document.getElementById('fen').innerText
 let moves = document.getElementById('moves').innerText.split(',')
 let id = document.getElementById('id').innerText
 const gameBoard = new GameBoard(fen)
-
 initializeScreen()
 console.log('moves are' , moves)
 setTimeout(()=>{

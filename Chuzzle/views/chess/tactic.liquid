@@ -4,20 +4,38 @@
 {% block content%}
 
 <div id="create-menu">
+    <h1>{{tactic.createdBy}}'s tactic</h1>
+    <h1 id="side-to-play"></h1>
     <div id="board-container-independent">
 
     </div>
     <form action="{{style}}" method="GET">
         <button id="success-btn" class="button">Move on to next</button>
     </form>
+    <div class="container" id="comments-container">
+        <h1>Comments!</h1>
+        <div id="comment-list-container">
+        {% for comm in commentList %}
+        <div class="comment">
+            <h3>{{comm.username}}</h3>
+            <p>{{comm.body}}</p>
+            </div>
+
+            {%endfor%}
+        </div>
+            <form action='{{style}}/{{tactic._id}}' method="POST" >
+                <input type="text" name="body" id="body">
+                <input type="submit" value="Post Comment">
+            </form>
+    </div>
 </div>
 
 
 
 
 <div class="hidden">
-    <div class="hidden" id="fen">{{fen}}</div>
-    <div class="hidden" id="id">{{id}}</div>
+    <div class="hidden" id="fen">{{tactic.fen}}</div>
+    <div class="hidden" id="id">{{tactic.id}}</div>
     <div class="hidden" id="moves">{{moves}}</div>
     <div class="hidden" id="currMove">{{currMove}}</div>
 </div>

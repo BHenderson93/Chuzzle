@@ -1,4 +1,4 @@
-console.log('Hooked up')
+//console.log('Hooked up')
 const emptyFEN = "8/8/8/8/8/8/8/8"
 
 //bug list - stalemate, pawn captures/en passant allowing check containing positions.
@@ -14,22 +14,22 @@ class GameBoard {
     }
 
     pieceAttemptsMove() {
-        console.log('trymove is', this.tryMove)
+        //console.log('trymove is', this.tryMove)
         this.moveString = this.tryMove[0].join('') + this.tryMove[1].join('')
-        console.log('moveString is', this.moveString)
+        //console.log('moveString is', this.moveString)
         //console.log(this.tryMove)
         let start = [Number(this.tryMove[0][0]), Number(this.tryMove[0][1])]
         let end = [Number(this.tryMove[1][0]), Number(this.tryMove[1][1])]
-        console.log('start,end',start,end)
+        //console.log('start,end',start,end)
         let piece = this.board[start[0]][start[1]]
         let movementPath = false
 
         const checkPiece = () => {
             if (typeof (piece) !== 'object') {
-                console.log('Cannot find piece on that square')
+                //console.log('Cannot find piece on that square')
                 return false
             } else if ((piece.side === 'White' && currentTurn !== 0) || (piece.side === 'Black' && currentTurn !== 1)) {
-                console.log('Not your turn!')
+                //console.log('Not your turn!')
                 return false
             }
             //console.log(`Piece is ${piece.name} and turn is ${currentTurn}`)
@@ -52,7 +52,7 @@ class GameBoard {
             //statement for capturing a piece by a pawn diagonally
             let startContents, endContents
             if (typeof (this.board[end[0]][end[1]]) === 'object' && (end[0] === piece.location[0] + piece.movementStyle[0][0] && (end[1] === piece.location[1] + 1 || end[1] === piece.location[1] - 1))) {
-                console.log('capturing w/ pawn')
+                //console.log('capturing w/ pawn')
                 this.board[start[0]][start[1]] = ''
                 endContents = this.captured.push(this.board[end[0]][end[1]])
                 this.board[end[0]][end[1]] = piece
@@ -60,7 +60,7 @@ class GameBoard {
                 piece.initialMoveAvailable = false
                 if (noKingChecks) {
                     if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
-                        console.log('attempting pawn promote')
+                        //console.log('attempting pawn promote')
                         this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
                     }
                     currentTurn === 0 ? currentTurn = 1 : currentTurn = 0
@@ -72,13 +72,13 @@ class GameBoard {
                 }
                 if (!noKingChecks()) {
                     if (isCheckmate()) {
-                        console.log('Checkmate!')
+                        //console.log('Checkmate!')
                     }
                 }
                 return true
                 //statement for capturing a pawn en passant
             } else if ((this.enPassant && end[1] === this.enPassant[1]) && (end[0] === piece.location[0] + piece.movementStyle[0][0] && (end[1] === piece.location[1] + 1 || end[1] === piece.location[1] - 1))) {
-                console.log('en passanted')
+                //console.log('en passanted')
                 this.board[start[0]][start[1]] = ''
                 endContents = this.board[this.enPassant[0]][this.enPassant[1]]
                 this.board[this.enPassant[0]][this.enPassant[1]] = ''
@@ -99,7 +99,7 @@ class GameBoard {
 
                 if (!noKingChecks()) {
                     if (isCheckmate()) {
-                        console.log('Checkmate!')
+                        //console.log('Checkmate!')
                     }
                 }
                 return true
@@ -232,7 +232,7 @@ class GameBoard {
                         let moveArr = findMoveArray(currPiece, king.location)
                         if (moveArr) {
                             if (noCollisions(moveArr, currPiece, king.location)) {
-                                console.log('KING IN CHECK!')
+                                //console.log('KING IN CHECK!')
                                 return false
                             }
                         } else if (currPiece.name === 'Pawn') {
@@ -294,7 +294,7 @@ class GameBoard {
                         if (currPiece.name === 'Pawn') {
                             //console.log('verifying enP', this.enPassant)
                             if (this.enPassant && this.enPassant[0] === currPiece.location[0] && (this.enPassant[1] === currPiece.location[1] + 1 || this.enPassant[1] === currPiece.location[1] - 1)) {
-                                console.log('checking en passant')
+                                //console.log('checking en passant')
                                 startContents = this.board[row][col]
                                 endContents = this.board[this.enPassant[0]][this.enPassant[1]]
                                 currPiece.location = [this.enPassant[0] + currPiece.movementStyle[0], this.enPassant[1]]
@@ -307,7 +307,7 @@ class GameBoard {
                                     this.board[this.enPassant[0]][this.enPassant[1]] = endContents
                                     this.board[this.enPassant[0] + currPiece.movementStyle[0][0]][this.enPassant[1]] = ''
                                     currPiece.location = [row, col]
-                                    console.log('King ok by en passant')
+                                    //console.log('King ok by en passant')
                                     return false
                                 } else {
                                     this.board[row][col] = startContents
@@ -333,7 +333,7 @@ class GameBoard {
                                     this.board[row][col] = startContents
                                     this.board[pawnTakesRow][pawnTakesCol1] = endContents
                                     currPiece.location = [row, col]
-                                    console.log('King ok by pawn capture')
+                                    //console.log('King ok by pawn capture')
                                     return false
                                 } else {
                                     this.board[row][col] = startContents
@@ -353,7 +353,7 @@ class GameBoard {
                                     this.board[row][col] = startContents
                                     this.board[pawnTakesRow][pawnTakesCol2] = endContents
                                     currPiece.location = [row, col]
-                                    console.log('King ok by pawn capture')
+                                    //console.log('King ok by pawn capture')
                                     return false
                                 } else {
                                     this.board[row][col] = startContents
@@ -389,14 +389,14 @@ class GameBoard {
                 }
             } else if (piece.name === 'King' && piece.initialMoveAvailable && Math.abs(end[1] - start[1]) === 2 && end[0] - start[0] === 0) {
                 if (tryCastling(piece)) {
-                    console.log('Castled')
+                    //console.log('Castled')
                     return
                 } else {
-                    console.log('Could not castle.')
+                    //console.log('Could not castle.')
                     return
                 }
             }
-            console.log(`Cannot find path for this ${piece.name}.`)
+            //console.log(`Cannot find path for this ${piece.name}.`)
             return
         }
 
@@ -421,7 +421,7 @@ class GameBoard {
                 }
                 if (piece.name === 'Pawn') {
                     if ((piece.side === 'White' && piece.location[0] === 0) || (piece.side === 'Black' && piece.location[0] === 7)) {
-                        console.log('attempting pawn promote')
+                        //console.log('attempting pawn promote')
                         this.board[piece.location[0]][piece.location[1]] = promotePawn(piece.side, piece.location)
                     }
                 }
@@ -439,7 +439,7 @@ class GameBoard {
         //see if that move results in checkmate
         if (!noKingChecks()) {
             if (isCheckmate()) {
-                console.log('Checkmate!')
+                //console.log('Checkmate!')
             }
         }
     }
@@ -471,7 +471,7 @@ class GameBoard {
         }
         if( recordingOn === true){
             let solution =''
-            console.log('try move is' ,this.tryMove)
+            //console.log('try move is' ,this.tryMove)
             moveRecord.push(this.tryMove.slice())
             solution+=String(this.tryMove[0][1])
             solution+=String(this.tryMove[0][0])
@@ -534,7 +534,7 @@ class GameBoard {
                 break
             }
             returnSolution+=(8-Number(solution[3]))
-            console.log('returning solution record' , solution, returnSolution)
+            //console.log('returning solution record' , solution, returnSolution)
             record.push(returnSolution)
         }
     }
@@ -778,8 +778,6 @@ const initializeScreen = () => {
         } else {
             workingID = e.target.id
         }
-
-
             if (e.target.classList.contains('square') || e.target.parentNode.classList.contains('square')) {
                 if (currentSelection !== '') {
                     //console.log('attempting to create')
@@ -805,12 +803,10 @@ const initializeScreen = () => {
                     gameBoard.redrawBoard()
                 } else {
                     if(recordingOn === true){
-                        console.log('attempt moved called')
+                        //console.log('attempt moved called')
                         gameBoard.tryMove[1] = workingID.split('')
                         gameBoard.pieceAttemptsMove()
                     }
-
-
                 }
 
             } else {
@@ -835,9 +831,12 @@ const clearScreen = () => {
     gameBoard.redrawBoard()
     return true
 }
-
+let startMove = ''
+let startTurn = 0
 const startRecording = () =>{
-    currentTurn === 0 ? startMove = ' w' : ' b'
+    console.log('startrecording currturn' , currentTurn)
+    currentTurn = startTurn
+    startTurn === 0 ? startMove = ' w' : ' b'
     recordingOn = true
     record = []
     moveRecord = []
@@ -855,6 +854,7 @@ const endRecording = () =>{
 let playback
 const replaySolution = () =>{
     startMove === ' w' ? currentTurn=0:currentTurn=1
+    console.log('curr turn, start move', currentTurn, startMove)
     gameBoard = new GameBoard(fen)
     gameBoard.initializeBoard()
     let moveIndex = 0
@@ -870,7 +870,7 @@ const replaySolution = () =>{
 
      playback = setInterval(intervalFunction, 1000)
 }
-let startmove = ''
+
 let fen
 let recordingOn = false
 let moveRecord = []

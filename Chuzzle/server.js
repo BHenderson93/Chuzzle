@@ -13,7 +13,11 @@ const gameRouter = require('./controllers/C-game')
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })) //for req.body contents to be passed on
 app.use(methodOverride("_method"))
-
+app.use(session({
+    secret:process.env.SECRET,
+    saveUnitialized:true,
+    reSave:false,
+}))
 
 //Routers
 app.use('/users' , userRouter)
@@ -25,17 +29,6 @@ app.use('/game' , gameRouter)
 app.get('/' , (req,res)=>{
     res.redirect('/users/login')
 })
-
-app.get('/board' , (req,res)=>{
-    res.render('chess/standardGame' , {
-
-    })
-})
-
-app.get('/seed' , (req,res)=>{
-    
-})
-
 //Server
 
 app.listen(3000 , ()=>{

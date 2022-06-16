@@ -10,9 +10,12 @@ header {
     background-color: lightseagreen;
     height: 10vh;
 }
-
+ul{
+    width:15vw;
+}
 main {
     height: 80vh;
+    width:90vw;
     position:relative;
     left: 10vw;
 }
@@ -91,8 +94,8 @@ aside {
     border: black solid 1px;
 }
 .piece-image{
-    height:90%;
-    width:90%;
+    height:100%;
+    width:100%;
     user-select: none;
 }
 #create-menu{
@@ -105,7 +108,9 @@ aside {
     display:flex;
     flex-flow: row nowrap;
 }
-
+#rules-list{
+    width:15vw;
+}
 #menu-list{
     display:grid;
     height:48vh;

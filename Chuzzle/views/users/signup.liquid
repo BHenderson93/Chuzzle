@@ -5,16 +5,17 @@
 
 <div class="container">
     <h1>Sign up for Chuzzle!</h1>
-    <form action="">
+    <form action="/users/signup" method="POST">
         Username:
-        <input type="text" name="username" id="">
+        <input type="text" name="username" id="" required>
         Password:
-        <input type="text" name="password" id="">
+        <input type="password" name="password" id="" required>
         Email:
         <input type="text" name="email" id="">
         <br />
         Join our 37 daily mailing lists or uncheck to approve us to sell your email address to our 158 affiliates for their daily mailing lists:
         <input type="checkbox" name="" id="" checked>
+        <input type="submit" value="Create your account!">
     </form>
 
     <a href="/users/login"><button>Back to login</button></a>

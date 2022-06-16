@@ -23,8 +23,9 @@
         <div class="menu-item"><button id="Eraser">Eraser</button></div>
     </div>
     <div class="option-list">
-        <div class="menu-option"><button class="menu-btn" onclick="startRecording()">Start Recording Solution</button>
-        </div>
+        <div class="menu-option"><button class="menu-btn" onclick="startTurn=1">Black Moves First</button></div>
+        <div class="menu-option"><button class="menu-btn" onclick="startTurn=0">White Moves First</button></div>
+        <div class="menu-option"><button class="menu-btn" onclick="startRecording()">Start Recording Solution</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="endRecording()">End Recording Solution</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="replaySolution()">Replay</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="clearScreen()">Reset Board</button></div>
@@ -41,12 +42,21 @@
         </div>
     </div>
     <div id="rules-list">
-        Drag and drop pieces onto the board
-        Make sure you have a black king AND a white king
-        When the position is ready, hit Start Recording
-        When you're finished hit End Recording, check it with Replay, and Publish it if you're ready!
-        Illegal moves will not be recorded
-        Currently this program cannot: detect stalemates, promote to knights, and allows a users king to be in check when their pawn captures. Please avoid these.
+        <ul>
+            <li>Drag and drop pieces onto the board</li>
+            <li>If black moves first, click 'Black Moves First'</li>
+            <li>The first move recorded is displayed to the user. The second move is the start of the solution.</li>
+            <li>Make sure you have a black king AND a white king</li>
+            <li>When the position is ready, hit Start Recording</li>
+            <li>When you're finished hit End Recording, check it with Replay, and Publish it if you're ready!</li>
+            <li>Illegal moves will not be recorded</li>
+            <li>Currently this program cannot: detect stalemates, promote to knights, and allows a users king to be in check when their pawn captures. Please avoid these.</li>
+        </ul>
+        
+        
+        
+        
+        
     </div>
 </div>
 
