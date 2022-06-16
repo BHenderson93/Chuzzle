@@ -836,7 +836,7 @@ let startTurn = 0
 const startRecording = () =>{
     console.log('startrecording currturn' , currentTurn)
     currentTurn = startTurn
-    startTurn === 0 ? startMove = ' w' : ' b'
+    currentTurn === 0 ? startMove = ' w' : ' b'
     recordingOn = true
     record = []
     moveRecord = []

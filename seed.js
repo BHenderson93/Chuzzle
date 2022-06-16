@@ -19,8 +19,8 @@ const options = {
 		'X-RapidAPI-Host': 'chess-puzzles.p.rapidapi.com'
 	}
 };
-
-fetch('https://chess-puzzles.p.rapidapi.com/?rating=1500&themesType=ALL&count=250', options)
+console.log('starting api fetch')
+fetch('https://chess-puzzles.p.rapidapi.com/?rating=1500&themesType=ALL&count=25', options)
 	.then(response => response.json())
 	.then(response => {
         apiTactics.deleteMany({}).then(() => {

@@ -3,7 +3,6 @@ const express = require('express')
 const path = require('path')
 const app = require('liquid-express-views')(express(), { root: [path.resolve(__dirname, 'views/')] })
 const session = require('express-session')
-const Mongo = require('connect-mongo')
 const mongoose = require('./models/M-connection')
 const methodOverride = require('method-override')
 
@@ -14,6 +13,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })) //for req.body contents to be passed on
 app.use(methodOverride("_method"))
 app.use(session({
+    secret:process.env.SECRET,
     saveUnitialized:true,
     reSave:false,
 }))
