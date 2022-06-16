@@ -14,7 +14,6 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })) //for req.body contents to be passed on
 app.use(methodOverride("_method"))
 app.use(session({
-    secret:process.env.SECRET,
     saveUnitialized:true,
     reSave:false,
 }))
