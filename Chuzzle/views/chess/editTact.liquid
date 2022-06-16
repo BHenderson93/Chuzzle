@@ -1,8 +1,6 @@
 {% layout 'layout.liquid' %}
 
 {% block content%}
-
-
 <div id="create-menu">
     <div id="board-container-independent">
 
@@ -31,13 +29,12 @@
         <div class="menu-option"><button class="menu-btn" onclick="clearScreen()">Reset Board</button></div>
         <br />
         <div class="menu-option">
-            <form action="/game/create" method="POST">
+            <form action="/game/tactic/user/{{tactic.id}}/edit" method="POST">
                 <div class="hidden">
                     <input type="text" name="fen" id="fen-tracker" class="hidden">
                     <input type="text" name="moves" id="moves-tracker" class="hidden">
-                    <input type="text" name="createdBy" id="create-tracker" class="hidden">
                 </div>
-                <button type="submit">Publish!</button>
+                <button type="submit">Confirm Edits!</button>
             </form>
         </div>
     </div>
@@ -55,7 +52,10 @@
     </div>
 </div>
 
-<div class="hidden" id="fen">{{fen}}</div>
+<div class="hidden">
+    <div class="hidden" id="fen">{{tactic.fen}}</div>
+    <div class="hidden" id="moves">{{moves}}</div>
+</div>
 
 <script src="/createLogic.js"></script>
 {% endblock %}

@@ -149,19 +149,39 @@ router.get('/tactic/api/:id', (req, res) => {
                     commentList
                 })
             })
-
         })
     }
 })
+
+router.get('/tactic/user/:id/edit', (req, res) => {
+    //get route placeholder for updating tactics
+    Tactic.findById(req.params.id).then((tactic)=>{
+        let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
+        let moves = tacticMoveConverter(tactic)
+        res.render('chess/editTact' , {
+            tactic,
+            currMove,
+            moves
+        })
+    }).catch((err)=>{
+        console.log('There was an error' , err)
+    })
+})
+
+router.get('/comment/:id/edit' , (req,res)=>{
+    //placeholder for comment edit route
+})
+
 
 router.get('/create', (req, res) => {
     if (!req.session.loggedIn) {
         res.redirect('/users/login')
     } else {
-        res.render('chess/create')
+        res.render('chess/create' , {
+            fen: ''
+        })
     }
 })
-
 
 router.post('/create', (req, res) => {
     if (!req.session.loggedIn) {
@@ -240,6 +260,28 @@ router.post('/tactic/api/:id', (req, res) => {
             res.redirect(`/game/tactic/user/${req.params.id}`)
         })
     }
-    
 })
+
+router.post('/tactic/user/:id/edit', (req, res) => {
+    //get route placeholder for updating tactics
+    Tactic.updateOne({_id : req.params.id} , {$set:{fen:req.body.fen , moves:req.body.moves.split(',')}}).then((result)=>{
+        console.log('edit complete' , result)
+        res.redirect(`/users/profile/${req.session.name}`)
+    }).catch((err)=>{
+        console.log(err)
+    })
+})
+
+router.post('/comment/:id/edit' , (req,res)=>{
+    //placeholder for comment edit route
+})
+
+router.post('/comment/delete' , (req,res)=>{
+    //delete route for comment
+})
+
+router.post('/tactic/user/:id/delete' , (req,res)=>{
+    //delete route for tactic
+})
+
 module.exports = router

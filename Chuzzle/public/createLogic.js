@@ -877,5 +877,5 @@ let moveRecord = []
 let record = []
 let currentSelection = ''
 let currentTurn = 0
-let gameBoard = new GameBoard(emptyFEN)
+let gameBoard = new GameBoard(document.getElementById('fen').innerText)
 initializeScreen()

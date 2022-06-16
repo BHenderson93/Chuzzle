@@ -8,37 +8,9 @@ const apiTactics = require('./models/M-apiTactic')
 const starterUsers = [{
     name: 'Bryce',
     password: '123',
-}, {
-    name: 'Jordan',
-    password: '123'
 }
 ]
 
-const starterTactics = [{
-    fen:'2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1 w',
-    moves:["c3d5","e6d5","c2c8","f8c8"],
-},{
-    fen: 'BQQBQQQQ/RRRRQQQK/NNQBQRNR/NQQBQNQB/BNNPnRBR/QQNNPPPQ/1RQPQQQQ/kBQQQQQQ w',
-    moves: [ 'c3a2', 'e4g5' ],
-    puzzleid: 'User Created',
-    createdBy: 'Bruce',
-},{
-    fen: 'rnbqk1nr/pppp1ppp/8/2b1p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b',
-    moves: [ 'a7a6', 'h5f7' ],
-    puzzleid: 'User Created',
-    createdBy: 'Bruce',
-},{
-    fen:'1KR1Q2R/PPn1PPBP/5NP1/8/5q2/2n2pb1/ppp3pp/1kr2b1r w',
-    moves: ['f6h5', 'c7a6', 'b8a8', 'f4b8', 'c8b8', 'a6c7'],
-    puzzleid:'SmotheredM8',
-    createdBy:'Mr.Bruce'
-},{
-    fen: '6r1/1k6/p1p1b3/1p2B3/1P3P2/P5Kp/8/7R w',
-    moves: ['g3h2' , 'g8g2'],
-    puzzleid: 'Rookm8',
-    createdBy:'Mr.Bruce'
-}
-]
 //API section
 const options = {
 	method: 'GET',
@@ -80,6 +52,9 @@ Comment.deleteMany({}).then(() => {
 }).catch((err) => {
     console.log('Error: ', err)
 }).finally(() => {
+})
+
+Tactics.deleteMany({}).then(()=>{
 
 })
 
@@ -94,6 +69,44 @@ Standard.deleteMany({}).then(() => {
 User.deleteMany({}).then(() => {
     User.create(starterUsers).then((users)=>{
         console.log('Reseeded users' , users)
+        User.findOne({}).then((user)=>{
+            const starterTactics = [{
+                fen:'2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1 w',
+                moves:["c3d5","e6d5","c2c8","f8c8"],
+                createdBy:`${user.name}`,
+                createdById: `${user._id}`,
+            },{
+                fen: 'BQQBQQQQ/RRRRQQQK/NNQBQRNR/NQQBQNQB/BNNPnRBR/QQNNPPPQ/1RQPQQQQ/kBQQQQQQ w',
+                moves: [ 'c3a2', 'e4g5' ],
+                puzzleid: 'User Created',
+                createdBy:`${user.name}`,
+                createdById: `${user._id}`,
+            },{
+                fen: 'rnbqk1nr/pppp1ppp/8/2b1p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b',
+                moves: [ 'a7a6', 'h5f7' ],
+                puzzleid: 'User Created',
+                createdBy:`${user.name}`,
+                createdById: `${user._id}`,
+            },{
+                fen:'1KR1Q2R/PPn1PPBP/5NP1/8/5q2/2n2pb1/ppp3pp/1kr2b1r w',
+                moves: ['f6h5', 'c7a6', 'b8a8', 'f4b8', 'c8b8', 'a6c7'],
+                puzzleid:'SmotheredM8',
+                createdBy:`${user.name}`,
+                createdById: `${user._id}`,
+            },{
+                fen: '6r1/1k6/p1p1b3/1p2B3/1P3P2/P5Kp/8/7R w',
+                moves: ['g3h2' , 'g8g2'],
+                puzzleid: 'Rookm8',
+                createdBy:`${user.name}`,
+                createdById: `${user._id}`,
+            }
+            ]
+            Tactics.deleteMany({}).then(()=>{
+                Tactics.create(starterTactics).then((tacts)=>{
+                    console.log('Reseeded Tactics',tacts)
+                })
+            })
+        })
     }).catch((err)=>{
         console.log(err)
     }).finally(()=>{
