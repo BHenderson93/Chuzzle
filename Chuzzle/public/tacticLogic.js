@@ -716,10 +716,7 @@ const initializeScreen = () => {
         gameBoard.tryMove[0] = myMove
     })
     document.addEventListener('mouseup' , ()=>{
-        let selected = document.getElementById('selected')
-        selected.classList.remove('hidden')
         document.body.style.cursor =''
-        selected.id = ''
     })
     document.getElementById('board-container-independent').addEventListener('mouseup', (e) => {
         //console.log(e.target.id)

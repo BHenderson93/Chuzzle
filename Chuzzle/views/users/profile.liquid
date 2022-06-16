@@ -28,8 +28,16 @@
     <div class="info">
         <h1>These are my comments</h1>
         {% for com in comList%}
-        <h3>{{com.username}}</h3>
-        <p>{{com.body}}</p>
+        <div class="comment">
+            <h3>{{com.username}}</h3>
+            <p>{{com.body}}</p>
+            <form action="/users/profile/{{name}}/{{com._id}}?_method=DELETE" method="POST">
+                <input class="hidden" type="text" name="user" id="" value="{{com.user}}">
+                <input class="hidden"type="text" name="location" id="" value="{{com.location}}">
+                <input type="submit" value="Delete comment">
+            </form>
+        </div>
+
         {% endfor %}
     </div>
     </div>

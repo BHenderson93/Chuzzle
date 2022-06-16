@@ -45,7 +45,9 @@ aside {
     justify-content: space-evenly;
     align-items: center;
 }
-
+.comment{
+    border:black solid 1px;
+}
 .square {
     height: 100%;
     width: 100%;

@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/M-user')
 const Tactics = require('../models/M-tactic')
 const Comments = require('../models/M-comment')
+const apiTactic = require('../models/M-apiTactic')
 const bcrypt = require('bcryptjs')
 
 
@@ -38,11 +39,11 @@ router.get('/profile/:username', (req, res) => {
                 res.render('users/profile', {
                     user,
                     tactList,
-                    comList
+                    comList,
+                    name:req.session.name
                 })
             })
         })
-                
     })
 })
 
@@ -94,6 +95,28 @@ router.get("/logout", (req, res) => {
     });
 });
 
+
+router.delete('/profile/:username/:id' , (req,res)=>{
+    console.log('hit delete route')
+    Comments.deleteOne({_id:req.params.id}).then((del)=>{
+        console.log('Comment deleted' , del)
+        User.updateOne({_id:req.body.user} , {$pull:{commentsCreatedList:req.params.id}}).then((com)=>{
+            console.log('user updated', com)
+            Tactics.updateOne({_id:req.body.location} , {$pull:{comments:req.params.location}}).then((validation)=>{
+                if (validation.matchedCount === 0){
+                    console.log('Could not find in tactics, must be api?')
+                    apiTactic.updateOne({_id:req.body.location} , {$pull:{comments:req.params.location}}).then((validation2)=>{
+                        console.log('api updated attempt ',validation2)
+                    })
+                }
+            })
+        })
+    }).catch((err)=>{
+        console.log('there was an error in deleting comment' ,err)
+    }).finally(()=>{
+        res.redirect(`/users/profile/${req.params.username}`)
+    })
+})
 
 
 

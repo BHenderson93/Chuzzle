@@ -849,7 +849,6 @@ const endRecording = () =>{
     recordingOn = false
     document.getElementById('fen-tracker').value = fen
     document.getElementById('moves-tracker').value = record
-    document.getElementById('create-tracker').value = 'Session Username'
 }
 let playback
 const replaySolution = () =>{

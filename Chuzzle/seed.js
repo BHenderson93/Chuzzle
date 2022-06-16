@@ -39,9 +39,7 @@ fetch('https://chess-puzzles.p.rapidapi.com/?rating=1500&themesType=ALL&count=25
         }).catch((err) => {
             console.log('Error: ', err)
         }).finally(() => {
-        
         })
-    
     })
 	.catch(err => console.error(err));
 

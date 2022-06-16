@@ -129,7 +129,6 @@ router.get('/tactic/api', (req, res) => {
         })
     }
     //pick a random one
-
 })
 
 router.get('/tactic/api/:id', (req, res) => {
@@ -168,17 +167,12 @@ router.get('/tactic/user/:id/edit', (req, res) => {
     })
 })
 
-router.get('/comment/:id/edit' , (req,res)=>{
-    //placeholder for comment edit route
-})
-
-
 router.get('/create', (req, res) => {
     if (!req.session.loggedIn) {
         res.redirect('/users/login')
     } else {
         res.render('chess/create' , {
-            fen: ''
+            fen: '8/8/8/8/8/8/8/8 w'
         })
     }
 })
@@ -270,14 +264,6 @@ router.post('/tactic/user/:id/edit', (req, res) => {
     }).catch((err)=>{
         console.log(err)
     })
-})
-
-router.post('/comment/:id/edit' , (req,res)=>{
-    //placeholder for comment edit route
-})
-
-router.post('/comment/delete' , (req,res)=>{
-    //delete route for comment
 })
 
 router.delete('/tactic/user/:id' , (req,res)=>{
