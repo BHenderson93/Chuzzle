@@ -11,12 +11,12 @@ AAU, I want to create my own puzzles for others to solve and enjoy.
 
 
 #The Wireframes:
-![](Images/Screen Shot 2022-06-10 at 1.51.05 PM.png)
+![](Images/Wireframe_Board.png)
 
 
 #The ERD: 
 
-![](Images/Screen Shot 2022-06-10 at 1.51.05 PM.png)
+![](Images/ERD.png)
 
 #Route Table:
 
