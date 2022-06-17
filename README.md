@@ -1,7 +1,7 @@
 # GA-Project-2
 
 # Title: Chuzzle
-
+Deployed at: https://chuzzle.herokuapp.com/
 Premise: Chess puzzle app where users can play other users, or API fetched, puzzles.
 
 # The User Story:
