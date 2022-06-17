@@ -23,28 +23,31 @@ router.get('/signup', (req, res) => {
 router.get('/profile', (req, res) => {
     if (!req.session.loggedIn) {
         res.redirect('/users/login')
+    }else{
+        res.redirect(`/users/profile/${req.session.name}`)
     }
-    res.redirect(`/users/profile/${req.session.name}`)
+
 })
 
 router.get('/profile/:username', (req, res) => {
     if (!req.session.loggedIn) {
         res.redirect('/users/login')
-    }
-    console.log('checking for name ' ,req.session.name)
-    User.findOne({ name: req.session.name }).then((user) => {
-        console.log('Found user' , user.name , 'Moving on to tactics')
-        Tactics.find({createdById:user._id}).then((tactList)=>{
-            Comments.find({user:user._id}).then((comList)=>{
-                res.render('users/profile', {
-                    user,
-                    tactList,
-                    comList,
-                    name:req.session.name
+    }else{
+        console.log('checking for name ' ,req.session.name)
+        User.findOne({ name: req.session.name }).then((user) => {
+            console.log('Found user' , user.name , 'Moving on to tactics')
+            Tactics.find({createdById:user._id}).then((tactList)=>{
+                Comments.find({user:user._id}).then((comList)=>{
+                    res.render('users/profile', {
+                        user,
+                        tactList,
+                        comList,
+                        name:req.session.name
+                    })
                 })
             })
         })
-    })
+    }
 })
 
 router.post("/signup", async (req, res) => {
@@ -73,7 +76,7 @@ router.post("/login", async (req, res) => {
                 req.session.name = name
                 req.session.userId = userIdString
                 req.session.loggedIn = true
-                res.redirect('/game/tactic/api')
+                res.redirect('/game/')
             } else {
                 console.log('Trouble matching PW')
                 res.redirect('/users/login');

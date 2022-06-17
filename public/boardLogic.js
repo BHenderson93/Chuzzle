@@ -457,7 +457,7 @@ class GameBoard {
     }
 
     initializeBoard() {
-        const gameBoard = document.getElementById('board-container')
+        const gameBoard = document.getElementById('board-container-independent')
         let fenIndex = 0
         //make the 64 squres
         for (let row = 0; row < 8; row++) {
@@ -622,7 +622,7 @@ class Pawn extends Piece {
 }
 
 const initializeScreen = () => {
-    document.getElementById('board-container').addEventListener('mousedown', (e) => {
+    document.getElementById('board-container-independent').addEventListener('mousedown', (e) => {
         //console.log(e.target.id)
         e.preventDefault();
         document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
@@ -639,15 +639,15 @@ const initializeScreen = () => {
         console.log('move down is ' , myMove)
         gameBoard.tryMove[0] = myMove
     })
-
+    
     document.addEventListener('mouseup' , ()=>{
         let selected = document.getElementById('selected')
         selected.classList.remove('hidden')
         document.body.style.cursor =''
         selected.id = ''
     })
-    document.getElementById('board-container').addEventListener('mouseup', (e) => {
-        //console.log(e.target.id)//
+    document.getElementById('board-container-independent').addEventListener('mouseup', (e) => {
+        //console.log(e.target.id)
         let myMove
         if(e.target.classList.contains('piece-image')){
             console.log('is piece image')

@@ -66,13 +66,23 @@ const tacticMoveConverter = (tacticJSON) => {
     return solutionArr
 }
 
+router.get('/' , (req,res)=>{
+    if (!req.session.loggedIn) {
+        res.redirect('/users/login')
+    }else{
+        res.render('chess/home')
+    }
+})
+
 router.get('/standard', (req, res) => {
     if (!req.session.loggedIn) {
         res.redirect('/users/login')
+    }else{
+        const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+        const testFEN = "2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1"
+        res.render('chess/standard')
     }
-    const generalFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-    const testFEN = "2r2rk1/3nqp1p/p3p1p1/np1p4/3P4/P1NBP3/1PQ2PPP/2R2RK1"
-    res.render('chess/standard')
+
 })
 
 router.get('/tactic/user', (req, res) => {
@@ -153,6 +163,9 @@ router.get('/tactic/api/:id', (req, res) => {
 })
 
 router.get('/tactic/user/:id/edit', (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('/users/login')
+    } else {
     //get route placeholder for updating tactics
     Tactic.findById(req.params.id).then((tactic)=>{
         let currMove = tactic.fen.split(' ')[1] === 'w' ? 0 : 1
@@ -165,6 +178,7 @@ router.get('/tactic/user/:id/edit', (req, res) => {
     }).catch((err)=>{
         console.log('There was an error' , err)
     })
+}
 })
 
 router.get('/create', (req, res) => {

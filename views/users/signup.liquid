@@ -1,24 +1,26 @@
 
-{% layout 'layout.liquid' %}
+{% layout 'layoutExternal.liquid' %}
 
 {% block content %}
 
-<div class="container">
+<div class="main-container flex-col-center">
     <h1>Sign up for Chuzzle!</h1>
     <form action="/users/signup" method="POST">
-        Username:
-        <input type="text" name="username" id="" required>
-        Password:
-        <input type="password" name="password" id="" required>
-        Email:
-        <input type="text" name="email" id="">
+        <h3>Username:</h3>
+        <input type="text" name="username" id="" placeholder="Username" required>
+        <p style="color:red" class="hidden">Problem creating with that username.</p>
+        <h3>Password:</h3>
+        <input type="password" name="password" id="" placeholder="Password" required>
+        <h3>Email:</h3>
+        <input type="text" name="email" id="" placeholder="Email">
         <br />
-        Join our 37 daily mailing lists or uncheck to approve us to sell your email address to our 158 affiliates for their daily mailing lists:
+        Join our 37 daily mailing lists:
         <input type="checkbox" name="" id="" checked>
+        <br />
         <input type="submit" value="Create your account!">
     </form>
-
-    <a href="/users/login"><button>Back to login</button></a>
+    <br/>
+    <a href="/users/login"><input type="submit" value="Back to Login"></a>
 </div>
 
 

@@ -1,21 +1,27 @@
 
-{% layout 'layout.liquid' %}
+{% layout 'layoutExternal.liquid' %}
 
 {%block content%}
-<h1>Login Page</h1>
-    <div class="container">
+<div class="main-container flex-col-center">
+
+    <div class="login-container flex-col-center">
+        <h1>Login</h1>
         <form action="/users/login" method="POST">
-            Username:
+            <h3>Username:</h3>
             <input type="text" name="name" id="" placeholder="Username">
-            Password:
-            <input type="password" name="password" id="" placeholder="Password">
-            <input type="submit" value="Log in">
+            <br />
+            <h3>Password:</h3>
+            <input  type="password" name="password" id="" placeholder="Password">
+            <p style="color:red" class="hidden">Problem logging in. Try again.</p>
+            <br />
+            <input class="form-input-submit"type="submit" value="Log in">
         </form>
-    </div>
-    <div>
-        Don't have an account? Sign up now!
-        <a href="/users/signup"><button>Click to sign up</button></a>
+        <div>
+            <h3>Or...</h3>
+            <a href="/users/signup"><input type="submit" value="Sign Up Here!"></a>
+        </div>
     </div>
 
+</div>
 {% endblock %}
 

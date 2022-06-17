@@ -375,7 +375,7 @@ class GameBoard {
             
             console.log(this.moveIndex, moves.length)
             if(this.moveIndex+1 === moves.length){
-                sideToPlay.innerText = 'Correct sequence! Puzzle complete.'
+                sideToPlay.innerText = 'Correct!'
                 console.log('Puzzle complete')
             }else{
                 sideToPlay.innerText = currentTurn === 1 ? 'White to move' : 'Black to move'

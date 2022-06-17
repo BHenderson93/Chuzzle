@@ -1,9 +1,20 @@
 {% layout 'layout.liquid' %}
 
 {% block content%}
+<div class="main-container">
 <div id="create-menu">
+    <div id="rules-list">
+        <ul>
+            <li>Drag and drop pieces</li>
+            <li>Black moves first? Click 'Black Moves First'</li>
+            <li>First move recorded is given. Second move is the start of your solution.</li>
+            <li>Puzzle MUST have black king AND a white king.</li>
+            <li>When ready, hit Start Recording and move pieces in order.</li>
+            <li>When finished hit End Recording, check it with Replay, and Publish if you're ready!</li>
+            <li>Illegal moves will not be recorded</li>
+        </ul>
+    </div>
     <div id="board-container-independent">
-
     </div>
     <div id="menu-list">
         <div class="menu-item"><img id="Q" src="/ChessPieces/whiteQueen.png" class="piece-image"></div>
@@ -18,7 +29,7 @@
         <div class="menu-item"><img id="b" src="/ChessPieces/blackBishop.png" class="piece-image"></div>
         <div class="menu-item"><img id="P" src="/ChessPieces/whitePawn.png" class="piece-image"></div>
         <div class="menu-item"><img id="p" src="/ChessPieces/blackPawn.png" class="piece-image"></div>
-        <div class="menu-item"><button id="Eraser">Eraser</button></div>
+        <div class="menu-item" id="eraser">Eraser</div>
     </div>
     <div class="option-list">
         <div class="menu-option"><button class="menu-btn" onclick="startTurn=1">Black Moves First</button></div>
@@ -27,37 +38,24 @@
         <div class="menu-option"><button class="menu-btn" onclick="endRecording()">End Recording Solution</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="replaySolution()">Replay</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="clearScreen()">Reset Board</button></div>
-        <br />
-        <div class="menu-option">
-            <form action="/game/tactic/user/{{tactic.id}}/edit" method="POST">
-                <div class="hidden">
-                    <input type="text" name="fen" id="fen-tracker" class="hidden">
-                    <input type="text" name="moves" id="moves-tracker" class="hidden">
-                </div>
-                <button type="submit">Confirm Edits!</button>
-            </form>
-        </div>
-        <div>
-            <h1>Danger section!</h1>
-            <form action="/game/tactic/user/{{tactic._id}}?_method=DELETE" method="POST">
-                <input class="hidden" type="text" name="createdById" id="" value="{{tactic.createdById}}">
-                <button>Delete this tactic. Cannot be undone.</button></form>
-        </div>
+        <form action="/game/tactic/user/{{tactic.id}}/edit" method="POST">
+            <div class="hidden">
+                <input type="text" name="fen" id="fen-tracker" class="hidden">
+                <input type="text" name="moves" id="moves-tracker" class="hidden">
+            </div>
+            <button type="submit" class="big-btn">Confirm Edits!</button>
+        </form>
     </div>
-    <div id="rules-list">
-        <ul>
-            <li>Drag and drop pieces onto the board</li>
-            <li>If black moves first, click 'Black Moves First'</li>
-            <li>The first move recorded is displayed to the user. The second move is the start of the solution.</li>
-            <li>Make sure you have a black king AND a white king</li>
-            <li>When the position is ready, hit Start Recording</li>
-            <li>When you're finished hit End Recording, check it with Replay, and Publish it if you're ready!</li>
-            <li>Illegal moves will not be recorded</li>
-            <li>Currently this program cannot: detect stalemates, promote to knights, and allows a users king to be in check when their pawn captures. Please avoid these.</li>
-        </ul>
+    <div>
+        <h1>Danger section!</h1>
+        <form action="/game/tactic/user/{{tactic._id}}?_method=DELETE" method="POST">
+            <input class="hidden" type="text" name="createdById" id="" value="{{tactic.createdById}}">
+            <button class="big-btn">Delete forever.</button></form>
     </div>
-</div>
+    </div>
 
+</div>
+</div>
 <div class="hidden">
     <div class="hidden" id="fen">{{tactic.fen}}</div>
     <div class="hidden" id="moves">{{moves}}</div>

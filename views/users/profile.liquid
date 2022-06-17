@@ -2,43 +2,36 @@
 
 {% block content %}
 
-
-<div class="main-display">
-    <div class="info-container">
-        <h1>Edit user info</h1>
-        <div class="info">
-            <h1>This is my user {{user.name}}
-                Delete and Update routes need to be created.
-                Then CSS updated.
-            </h1>
+<div class="main-container flex-col-center">
+    <h1 style="margin-top:3vh;">Hi, {{user.name}}! Here's your stuff.</h1>
+    <div class="main-container flex-row-center" style="border:none;box-shadow:none;">
+        <div class="flex-col-center profile-display" id="profile-tactics">
+            <h1>Edit Tactics</h1>
+            <div class="info">
+                {% for tact in tactList %}
+                <a href="/game/tactic/user/{{tact._id}}/edit">
+                    <p>{{tact.fen}}</p>
+                </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    <div class="info-container">
-    <h1>Edit Your Tactics</h1>
-    <div class="info">
-        <h1>These are my tactics by FEN</h1>
-        {% for tact in tactList %}
-           <a href="/game/tactic/user/{{tact._id}}/edit"><p>{{tact.fen}}</p></a> 
-        {% endfor %}
-    </div>
-    </div>
-    <div class="info-container">
-    <h1>Edit Comments</h1>
-    <div class="info">
-        <h1>These are my comments</h1>
-        {% for com in comList%}
-        <div class="comment">
-            <h3>{{com.username}}</h3>
-            <p>{{com.body}}</p>
-            <form action="/users/profile/{{name}}/{{com._id}}?_method=DELETE" method="POST">
-                <input class="hidden" type="text" name="user" id="" value="{{com.user}}">
-                <input class="hidden"type="text" name="location" id="" value="{{com.location}}">
-                <input type="submit" value="Delete comment">
-            </form>
-        </div>
+        <div id="profile-comments" class="flex-col-center profile-display">
+            <h1>Review Comments</h1>
+            <div class="info">
+                {% for com in comList%}
+                <div class="comment">
+                    <h3>{{com.username}}</h3>
+                    <p>{{com.body}}</p>
+                    <form action="/users/profile/{{name}}/{{com._id}}?_method=DELETE" method="POST">
+                        <input class="hidden" type="text" name="user" id="" value="{{com.user}}">
+                        <input class="hidden" type="text" name="location" id="" value="{{com.location}}">
+                        <input type="submit" value="Delete comment">
+                    </form>
+                </div>
 
-        {% endfor %}
-    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 
