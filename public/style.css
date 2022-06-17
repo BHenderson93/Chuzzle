@@ -3,7 +3,9 @@ body {
     height: 100vh;
 
 }
-
+button{
+    background-color: lightgray;
+}
 form {
     display: flex;
     flex-flow: column nowrap;
@@ -87,6 +89,7 @@ aside {
     border: black solid 1px;
     padding: .5vw;
     margin: .3vh 0;
+    background-color: #CAE9F5;
 }
 
 .square {
@@ -99,7 +102,7 @@ aside {
 }
 
 .main-container {
-    background: lightgrey;
+    background: whitesmoke;
     border: 2px solid black;
     border-radius: 3vw;
     box-shadow: .4vh .6vh grey;
@@ -148,7 +151,7 @@ aside {
     left: 1%;
     font-size: 7vh;
     color: whitesmoke;
-    text-shadow: 1px 2px grey;
+    text-shadow: 2px 4px navy;
 }
 
 .flex-row-center {
@@ -170,7 +173,6 @@ aside {
     top: 50%;
     left: 55%;
     transform: translate(-50%, -50%);
-    background: cornflowerblue;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
@@ -182,7 +184,6 @@ aside {
     height: 0;
     width: 0;
 }
-
 .info {
     height: 80%;
     width: 90%;
@@ -234,6 +235,15 @@ aside {
     border: 1px solid black;
     padding: .5vw;
 }
+#tactic-list-container{
+    height: 45vh;
+    width:25vw;
+    border: 1px solid black;
+    padding: .5vw;
+}
+.tactic-li{
+    width:23vw;
+}
 
 #rules-list {
     width: 25vw;
@@ -260,9 +270,11 @@ aside {
 }
 
 #success-btn {
-    height: 20vh;
+    height: 10vh;
     width: 5vw;
     margin: 1vw;
+    border-radius: .5vw;
+    box-shadow: 1px 2px grey;
 }
 
 #board-container {

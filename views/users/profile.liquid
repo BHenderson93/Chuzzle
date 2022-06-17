@@ -3,16 +3,22 @@
 {% block content %}
 
 <div class="main-container flex-col-center">
-    <h1 style="margin-top:3vh;">Hi, {{user.name}}! Here's your stuff.</h1>
-    <div class="main-container flex-row-center" style="border:none;box-shadow:none;">
+    <h1>Hi, {{user.name}}! Here's your stuff.</h1>
+    <br />
+    <div class="flex-row-center" >
         <div class="flex-col-center profile-display" id="profile-tactics">
             <h1>Edit Tactics</h1>
             <div class="info">
-                {% for tact in tactList %}
-                <a href="/game/tactic/user/{{tact._id}}/edit">
-                    <p>{{tact.fen}}</p>
-                </a>
-                {% endfor %}
+                <div id="tactic-list-container">
+                    <ul>
+                    {% for tact in tactList %}
+                    <li class="tactic-li"><a href="/game/tactic/user/{{tact._id}}/edit">
+                        <p>{{tact.fen}}</p>
+                    </a></li>
+                    {% endfor %}
+                </ul>
+                </div>
+
             </div>
         </div>
         <div id="profile-comments" class="flex-col-center profile-display">

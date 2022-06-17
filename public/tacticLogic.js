@@ -376,6 +376,7 @@ class GameBoard {
             console.log(this.moveIndex, moves.length)
             if(this.moveIndex+1 === moves.length){
                 sideToPlay.innerText = 'Correct!'
+                document.getElementById('success-btn').style.background = '#33a532'
                 console.log('Puzzle complete')
             }else{
                 sideToPlay.innerText = currentTurn === 1 ? 'White to move' : 'Black to move'
@@ -387,6 +388,7 @@ class GameBoard {
             }
         }else{
             console.log('Wrong move!')
+            document.getElementById('success-btn').style.background = '#bb1e10'
             sideToPlay.innerText = currTurn === 0 ? 'White to move' : 'Black to move'
             currentTurn = currTurn
             this.moveIndex = 0

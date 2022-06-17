@@ -1,41 +1,38 @@
-
 {% layout 'layout.liquid' %}
 
 {% block content%}
 <div class="main-container">
-<div id="create-menu">
-    <div class="general-info-container">
-        <h1>{{tactic.createdBy}}'s tactic</h1>
-        <br />
-        <h1 id="side-to-play"></h1>
-    </div>
-    <div id="board-container-independent">
-    </div>
-
-    <div class="container" id="comments-container">
-        <h1>Comments!</h1>
-        <div id="comment-list-container">
-        {% for comm in commentList %}
-        <div class="comment">
-            <h4>{{comm.username}}</h4>
-            <p>{{comm.body}}</p>
-            </div>
-
-            {%endfor%}
-
+    <div id="create-menu">
+        <div class="general-info-container">
+            <h1>{{tactic.createdBy}}'s tactic</h1>
+            <br />
+            <h1 id="side-to-play"></h1>
         </div>
-        <form action='{{style}}/{{tactic._id}}' method="POST" >
-            <input type="text" name="body" id="body" placeholder="Type your comment here">
-            <input type="submit" value="Post Comment" class="form-input-submit">
+        <div id="board-container-independent">
+        </div>
+
+        <div class="container" id="comments-container">
+            <h1>Comments!</h1>
+            <div id="comment-list-container">
+                {% for comm in commentList %}
+                <div class="comment">
+                    <h4>{{comm.username}}</h4>
+                    <p>{{comm.body}}</p>
+                </div>
+
+                {%endfor%}
+
+            </div>
+            <form action='{{style}}/{{tactic._id}}' method="POST">
+                <input type="text" name="body" id="body" placeholder="Type your comment here">
+                <input type="submit" value="Post Comment" class="form-input-submit">
+            </form>
+        </div>
+        <form action="{{style}}" method="GET">
+            <button id="success-btn" class="button">Next puzzle</button>
         </form>
     </div>
-    <form action="{{style}}" method="GET">
-        <button id="success-btn" class="button">Next puzzle</button>
-    </form>
 </div>
-</div>
-
-
 
 <div class="hidden">
     <div class="hidden" id="fen">{{tactic.fen}}</div>
@@ -47,4 +44,3 @@
 
 <script src="/tacticLogic.js"></script>
 {% endblock %}
-
