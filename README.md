@@ -13,7 +13,7 @@ AAU, I want to comment on other's puzzles and be part of a community.
 ![](Images/Wireframe_Board.png)
 
 # The ERD: 
-![](Images/ERD.png)
+![](Images/newERD.png)
 
 # Route Table:
 ![](Images/RouteTable.png)
