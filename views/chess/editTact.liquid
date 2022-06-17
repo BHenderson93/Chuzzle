@@ -38,7 +38,7 @@
         <div class="menu-option"><button class="menu-btn" onclick="endRecording()">End Recording Solution</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="replaySolution()">Replay</button></div>
         <div class="menu-option"><button class="menu-btn" onclick="clearScreen()">Reset Board</button></div>
-        <form action="/game/tactic/user/{{tactic.id}}/edit" method="POST">
+        <form action="/game/tactic/user/{{tactic.id}}/edit?_method=PUT" method="POST">
             <div class="hidden">
                 <input type="text" name="fen" id="fen-tracker" class="hidden">
                 <input type="text" name="moves" id="moves-tracker" class="hidden">

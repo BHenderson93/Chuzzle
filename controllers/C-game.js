@@ -270,7 +270,7 @@ router.post('/tactic/api/:id', (req, res) => {
     }
 })
 
-router.post('/tactic/user/:id/edit', (req, res) => {
+router.put('/tactic/user/:id/edit', (req, res) => {
     //get route placeholder for updating tactics
     Tactic.updateOne({_id : req.params.id} , {$set:{fen:req.body.fen , moves:req.body.moves.split(',')}}).then((result)=>{
         console.log('edit complete' , result)
