@@ -206,6 +206,7 @@ aside {
 
 .general-info-container {
     width: 25vw;
+    max-width: 25vw;
     height: 65vh;
 }
 
@@ -315,6 +316,15 @@ aside {
     width: 15.8vh;
     height: 16.6vh;
     font-size: 4vh;
+}
+
+.med-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8vh;
+    height: 8vh;
+    font-size: 2vh;
 }
 
 #board-container-independent {

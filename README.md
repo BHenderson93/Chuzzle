@@ -36,3 +36,14 @@ Have 'replay moves' function on tactic edits.
 Minor bug fixes.
 Chess board logic reformatting for readability.
 Score tracking - attempts/fails/etc
+
+ document.getElementById('board-container-independent').addEventListener('mousedown', (e) => {
+     e.preventDefault();
+        document.body.style.cursor = `url(${e.target.src}) 45 45 , auto`
+        e.target.classList.add('hidden')
+        }
+
+document.addEventListener('mouseup' , ()=>{
+        document.body.style.cursor =''
+        //code to go back to e.target from before and remove class('hidden')
+    })

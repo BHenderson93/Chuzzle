@@ -557,7 +557,6 @@ class Piece {
             this.allMoves.push(moveStyleArray)
         }
     }
-
 }
 
 class Queen extends Piece {
