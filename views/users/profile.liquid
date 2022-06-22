@@ -13,8 +13,9 @@
                     <ul>
                     {% for tact in tactList %}
                     <li class="tactic-li"><a href="/game/tactic/user/{{tact._id}}/edit">
-                        <p>{{tact.fen}}</p>
-                    </a></li>
+                        <p>{{tact.fen}}</p></a>
+                        <a href="/game/tactic/user/{{tact._id}}"><input type="submit" value="View"></a>
+                    </li>
                     {% endfor %}
                 </ul>
                 </div>

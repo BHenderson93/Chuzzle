@@ -35,7 +35,7 @@ header {
 
 input {
     height: 5vh;
-    width: 25vw;
+    width: 20vw;
 }
 
 ul {
@@ -240,7 +240,7 @@ aside {
 #tactic-list-container{
     height: 45vh;
     width:25vw;
-    border: 1px solid black;
+    border-top: 1px solid black;
     padding: .5vw;
 }
 .tactic-li{

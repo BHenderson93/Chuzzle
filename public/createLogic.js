@@ -634,6 +634,9 @@ class GameBoard {
                 fen += '/'
             }
         }
+
+        fen+= startMove
+        
         return fen
     }
 }
